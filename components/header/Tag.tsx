@@ -1,5 +1,5 @@
 import { X } from "phosphor-react";
-import { AnyArtTag } from "../../helpers/ArtGallery";
+import { AnyArtTag } from "../../helpers/ArtGallery.types";
 
 export interface TagProps {
   tag: AnyArtTag;

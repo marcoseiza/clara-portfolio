@@ -6,7 +6,7 @@ import {
   ArtSeries,
   filterArtByTags,
   getTagsFromArtSeriesList,
-} from "../helpers/ArtGallery";
+} from "../helpers/ArtGallery.types";
 import { defaultArtSeries } from "../helpers/DefaultArtGallery";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
 import { useHeaderHeight, useTags } from "../store";

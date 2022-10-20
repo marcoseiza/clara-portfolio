@@ -1,4 +1,4 @@
-import { ArtSeries, ArtTagType, AVAILABLE, SOLD } from "./ArtGallery";
+import { ArtSeries, ArtTagType, AVAILABLE, SOLD } from "./ArtGallery.types";
 
 export const defaultArtSeries: ArtSeries[] = [
   {

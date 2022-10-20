@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import Masonry from "react-masonry-css";
-import { ArtSeries } from "../helpers/ArtGallery";
+import { ArtSeries } from "../helpers/ArtGallery.types";
 import useEventListener from "../helpers/hooks/UseEventListener";
 import { useHeaderHeight } from "../store";
 import ArtPiece from "./ArtPiece";

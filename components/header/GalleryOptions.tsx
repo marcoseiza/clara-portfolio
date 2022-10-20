@@ -1,4 +1,4 @@
-import { AnyArtTag, ArtTagType } from "../../helpers/ArtGallery";
+import { AnyArtTag, ArtTagType } from "../../helpers/ArtGallery.types";
 import { useTags } from "../../store";
 import GalleryOptionField from "./GalleryOptionField";
 

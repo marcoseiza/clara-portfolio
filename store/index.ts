@@ -1,5 +1,5 @@
 import create from "zustand";
-import { AnyArtTag } from "../helpers/ArtGallery";
+import { AnyArtTag } from "../helpers/ArtGallery.types";
 
 interface UseTags {
   tags: AnyArtTag[];

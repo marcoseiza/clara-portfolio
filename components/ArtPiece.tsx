@@ -1,4 +1,4 @@
-import { ArtInfo } from "../helpers/ArtGallery";
+import { ArtInfo } from "../helpers/ArtGallery.types";
 
 export interface ArtPieceProps {
   info: ArtInfo;
@@ -7,7 +7,7 @@ export interface ArtPieceProps {
 const ArtPiece = ({ info }: ArtPieceProps) => {
   return (
     <a
-      href="/art/{art.slug}"
+      href={`/art/${info.slug}`}
       className="hover:scale-[1.02] transition-transform"
     >
       <img src={info.src} alt="" className="w-full" />

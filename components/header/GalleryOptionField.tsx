@@ -1,5 +1,5 @@
 import { CheckSquare, Square } from "phosphor-react";
-import { AnyArtTag, ArtTag, ArtTagType } from "../../helpers/ArtGallery";
+import { AnyArtTag } from "../../helpers/ArtGallery.types";
 
 export interface GalleryOptionFieldProps {
   tag: AnyArtTag;
