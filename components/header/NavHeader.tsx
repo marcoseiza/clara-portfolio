@@ -21,7 +21,7 @@ const NavHeader = ({ passHeight }: NavHeaderProps) => {
     >
       <h1 className="text-2xl font-bold">CLARA EIZAYAGA</h1>
       <nav className="flex items-center gap-4">
-        <a href="#gallery">GALLERY</a>
+        <a href="/#gallery">GALLERY</a>
         <a href="/">ABOUT</a>
         <a href="/">CONTACT</a>
       </nav>

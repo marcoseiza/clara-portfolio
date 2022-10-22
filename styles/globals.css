@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  scroll-behavior: smooth;
+}
+
 .vertical-text {
   writing-mode: vertical-lr;
   @apply rotate-180;

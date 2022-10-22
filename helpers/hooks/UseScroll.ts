@@ -29,9 +29,10 @@ export const useScrollRef = <T extends HTMLElement = HTMLDivElement>(
 };
 
 export const useTouchTop = <T extends HTMLElement = HTMLDivElement>(
+  initial?: boolean,
   offset?: number
 ): [(node: T | null) => void, boolean] => {
-  const [touched, setTouched] = useState<boolean>(false);
+  const [touched, setTouched] = useState<boolean>(initial || false);
 
   const [ref, scroll] = useScrollRef<T>(offset);
 

@@ -5,7 +5,7 @@ import GalleryHeader from "./GalleryHeader";
 import NavHeader from "./NavHeader";
 
 export interface HeaderProps {
-  isGallery: boolean;
+  isGallery?: boolean;
 }
 
 const Header = ({ isGallery }: HeaderProps) => {

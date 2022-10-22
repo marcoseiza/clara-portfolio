@@ -1,8 +1,14 @@
-import "../styles/globals.css";
+import Tina from "../.tina/components/TinaDynamicProvider";
 import type { AppProps } from "next/app";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+import "../styles/globals.css";
 
-export default MyApp;
+const App = ({ Component, pageProps }: AppProps) => {
+  return (
+    <Tina>
+      <Component {...pageProps} />
+    </Tina>
+  );
+};
+
+export default App;

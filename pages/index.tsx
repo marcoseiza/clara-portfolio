@@ -1,5 +1,5 @@
-import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import type { GetStaticProps, NextPage } from "next";
+import { useEffect } from "react";
 import ArtGallerySeries from "../components/ArtGallerySeries";
 import Header from "../components/header/Header";
 import {
@@ -11,9 +11,11 @@ import { defaultArtSeries } from "../helpers/DefaultArtGallery";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
 import { useHeaderHeight, useTags } from "../store";
 
-const Home: NextPage = () => {
-  const artSeries: ArtSeries[] = defaultArtSeries;
+interface StaticProps {
+  artSeries: ArtSeries[];
+}
 
+const Home: NextPage<StaticProps> = ({ artSeries }: StaticProps) => {
   useEffect(() => {
     useTags.setState({ tags: getTagsFromArtSeriesList(artSeries) });
   }, []);
@@ -29,7 +31,7 @@ const Home: NextPage = () => {
 
   const headerHeight = useHeaderHeight((state) => state.height);
 
-  const [scrollAnchor, touched] = useTouchTop();
+  const [scrollAnchor, touched] = useTouchTop(true);
 
   return (
     <>
@@ -61,6 +63,14 @@ const Home: NextPage = () => {
       </div>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+  return {
+    props: {
+      artSeries: defaultArtSeries,
+    },
+  };
 };
 
 export default Home;
