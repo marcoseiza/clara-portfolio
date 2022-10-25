@@ -15,11 +15,13 @@ const NavHeader = ({ passHeight }: NavHeaderProps) => {
   return (
     <header
       ref={headerRef}
-      className={`fixed inset-x-0 top-0 py-4 px-8 bg-white flex items-center justify-between ${
+      className={`fixed w-full top-0 py-4 px-8 bg-white flex items-center justify-between ${
         scrollY == 0 ? "" : "shadow-lg"
       } transition-shadow`}
     >
-      <h1 className="text-2xl font-bold">CLARA EIZAYAGA</h1>
+      <h1 className="text-2xl font-bold">
+        <a href="/">CLARA EIZAYAGA</a>
+      </h1>
       <nav className="flex items-center gap-4">
         <a href="/#gallery">GALLERY</a>
         <a href="/">ABOUT</a>

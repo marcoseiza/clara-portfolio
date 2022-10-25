@@ -1,6 +1,8 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useEffect } from "react";
+import client from "../.tina/__generated__/client";
 import ArtGallerySeries from "../components/ArtGallerySeries";
+import ArtPiece from "../components/ArtPiece";
 import Header from "../components/header/Header";
 import {
   ArtSeries,
@@ -11,17 +13,24 @@ import { defaultArtSeries } from "../helpers/DefaultArtGallery";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
 import { useHeaderHeight, useTags } from "../store";
 
-interface StaticProps {
-  artSeries: ArtSeries[];
+interface ArtPiece {
+  src: string;
+  title: string;
+  series: { name: string; id: string };
+  link: string;
 }
 
-const Home: NextPage<StaticProps> = ({ artSeries }: StaticProps) => {
+interface StaticProps {
+  art: ArtPiece[];
+}
+
+const Home: NextPage<StaticProps> = ({ art }: StaticProps) => {
   useEffect(() => {
-    useTags.setState({ tags: getTagsFromArtSeriesList(artSeries) });
+    useTags.setState({ tags: getTagsFromArtSeriesList(defaultArtSeries) });
   }, []);
 
   const { filteredArt, noArt } = useTags((state) => {
-    let filteredArt = filterArtByTags(artSeries, state.chosenTags);
+    let filteredArt = filterArtByTags(defaultArtSeries, state.chosenTags);
     return {
       filteredArt,
       noArt:
@@ -65,10 +74,22 @@ const Home: NextPage<StaticProps> = ({ artSeries }: StaticProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getServerSideProps: GetServerSideProps<StaticProps> = async () => {
+  const art = (await client.queries.artConnection()).data.artConnection.edges
+    ?.map((v) => {
+      if (!v?.node) return;
+      return {
+        src: v.node.src,
+        title: v.node.title,
+        series: v.node.series,
+        link: v.node._sys.filename,
+      } as ArtPiece;
+    })
+    .filter((v): v is ArtPiece => v != undefined);
+
   return {
     props: {
-      artSeries: defaultArtSeries,
+      art: art ?? [],
     },
   };
 };

@@ -28,7 +28,7 @@ const GalleryHeader = ({ passHeight }: GalleryHeaderProps) => {
     <>
       <header
         ref={headerRef}
-        className={`z-50 fixed inset-x-0 top-0 py-4 px-8 bg-white flex items-center justify-between shadow-lg transition-shadow`}
+        className={`z-50 fixed w-full top-0 py-4 px-8 bg-white flex items-center justify-between shadow-lg transition-shadow`}
       >
         <h1 className="text-2xl font-bold">GALLERY</h1>
         <div className="flex items-center gap-6">
