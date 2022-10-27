@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useElementSize from "../../helpers/hooks/UseElementSize";
 import useScroll from "../../helpers/hooks/UseScroll";
+import { motion } from "framer-motion";
 
 export interface NavHeaderProps {
   passHeight?: (height: number) => void;
@@ -23,7 +24,9 @@ const NavHeader = ({ passHeight }: NavHeaderProps) => {
         <a href="/">CLARA EIZAYAGA</a>
       </h1>
       <nav className="flex items-center gap-4">
-        <a href="/#gallery">GALLERY</a>
+        <motion.div layoutId="gallery" transition={{ duration: 0 }}>
+          <a href="/#gallery">GALLERY</a>
+        </motion.div>
         <a href="/">ABOUT</a>
         <a href="/">CONTACT</a>
       </nav>

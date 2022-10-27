@@ -1,9 +1,10 @@
 import { FunnelSimple } from "phosphor-react";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useElementSize from "../../helpers/hooks/UseElementSize";
 import { useTags } from "../../store";
 import GalleryOptions from "./GalleryOptions";
 import Tag from "./Tag";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface GalleryHeaderProps {
   passHeight?: (height: number) => void;
@@ -30,7 +31,11 @@ const GalleryHeader = ({ passHeight }: GalleryHeaderProps) => {
         ref={headerRef}
         className={`z-50 fixed w-full top-0 py-4 px-8 bg-white flex items-center justify-between shadow-lg transition-shadow`}
       >
-        <h1 className="text-2xl font-bold">GALLERY</h1>
+        <motion.div layoutId="gallery" transition={{ duration: 0.4 }}>
+          <a href="/#gallery" className="text-2xl font-bold">
+            GALLERY
+          </a>
+        </motion.div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             {chosenTags.map((t, i) => (
@@ -42,9 +47,11 @@ const GalleryHeader = ({ passHeight }: GalleryHeaderProps) => {
           </button>
         </div>
       </header>
-      {showGalleryOptions && (
-        <GalleryOptions headerHeight={height} tags={tags} />
-      )}
+      <AnimatePresence>
+        {showGalleryOptions && (
+          <GalleryOptions headerHeight={height} tags={tags} />
+        )}
+      </AnimatePresence>
     </>
   );
 };
