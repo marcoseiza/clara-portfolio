@@ -21,6 +21,53 @@ const schema = defineSchema({
   },
   collections: [
     {
+      name: "index",
+      label: "Index",
+      path: "content/index",
+      format: "mdx",
+      ui: {
+        router: () => "/",
+      },
+      fields: [
+        {
+          type: "image",
+          label: "Hero Image",
+          name: "image",
+          required: true,
+        },
+        {
+          type: "object",
+          name: "series",
+          label: "Series",
+          list: true,
+          ui: {
+            itemProps: (item) => {
+              return { label: `${item.series}` };
+            },
+          },
+          fields: [
+            {
+              type: "reference",
+              label: "Series",
+              name: "series",
+              collections: ["series"],
+              required: true,
+              ui: {
+                validate: (value) => {
+                  if (value == undefined) {
+                    return "A series must be chosen.";
+                  }
+                  if (!Array.isArray(value) && (value as string).length == 0) {
+                    return "An option must be chosen.";
+                  }
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
       label: "Art Series",
       name: "series",
       path: "content/series",
@@ -44,6 +91,7 @@ const schema = defineSchema({
       },
       defaultItem: () => ({
         hasPrice: true,
+        sold: false,
         price: 0,
       }),
       fields: [
@@ -52,6 +100,12 @@ const schema = defineSchema({
           label: "Series",
           name: "series",
           collections: ["series"],
+          required: true,
+        },
+        {
+          type: "boolean",
+          label: "Sold",
+          name: "sold",
           required: true,
         },
         {

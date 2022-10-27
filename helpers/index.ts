@@ -6,6 +6,10 @@ export const maxCSS = (a: string | number, b: string | number): string => {
 
 export type ErrorProps = { error: { code: number; message: string } };
 
-export function isError<T>(error: ErrorProps | T): error is ErrorProps {
+export const isError = <T>(error: ErrorProps | T): error is ErrorProps => {
   return (error as ErrorProps).error !== undefined;
-}
+};
+
+export const makeError = (code: number, message: string) => ({
+  error: { code, message },
+});

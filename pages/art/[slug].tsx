@@ -2,24 +2,24 @@ import { useTina } from "tinacms/dist/edit-state";
 import client from "../../.tina/__generated__/client";
 import {
   ArtQuery,
-  Exact,
   Art as ArtInfo,
+  ArtQueryVariables,
 } from "../../.tina/__generated__/types";
-import Header from "../../components/header/Header";
-import { useHeaderHeight } from "../../store";
 import MaybeImage from "../../components/MaybeImage";
 import MaybeBody from "../../components/MaybeBody";
 import { maxCSS, ErrorProps, isError } from "../../helpers";
 import { GetServerSideProps } from "next/types";
 import Error from "../../components/Error";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-interface StaticProps {
+import BaseLayout from "../../components/BaseLayout";
+
+interface ServerSideProps {
   data: ArtQuery;
-  variables: Exact<{ relativePath: string }>;
+  variables: ArtQueryVariables;
   query: string;
 }
 
-const Art = (props: StaticProps | ErrorProps) => {
+const Art = (props: ServerSideProps | ErrorProps) => {
   if (isError(props))
     return <Error code={props.error.code} title={props.error.message} />;
 
@@ -27,8 +27,6 @@ const Art = (props: StaticProps | ErrorProps) => {
   const page = useTina({ query, variables, data });
 
   const art = page.data?.art as ArtInfo;
-
-  const headerHeight = useHeaderHeight((state) => state.height);
 
   function renderContent(art: ArtInfo) {
     return (
@@ -46,11 +44,11 @@ const Art = (props: StaticProps | ErrorProps) => {
             <div className="prose">
               <h1 className="mb-4 uppercase">{art.title}</h1>
               {art.hasPrice ? (
-                <h3 className="mt-4 mb-3">${art.price}</h3>
+                <h3 className="mt-4 mb-3">${art.price?.toLocaleString()}</h3>
               ) : (
-                <h3 className="mt-4 mb-3 font-normal text-gray-500">
-                  Contact the seller for a price.
-                </h3>
+                <h4 className="mt-4 mb-3 font-normal text-gray-500 uppercase">
+                  Contact the seller for price.
+                </h4>
               )}
             </div>
             <MaybeBody>
@@ -75,21 +73,11 @@ const Art = (props: StaticProps | ErrorProps) => {
     );
   }
 
-  return (
-    <>
-      <Header />
-      <div
-        className="md:container px-5 mx-auto mt-[var(--headerHeight)]"
-        style={{ [`--headerHeight` as any]: `${headerHeight}px` }}
-      >
-        {art && renderContent(art)}
-      </div>
-    </>
-  );
+  return <BaseLayout>{art && renderContent(art)}</BaseLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps<
-  StaticProps | ErrorProps
+  ServerSideProps | ErrorProps
 > = async (context) => {
   const slug = context.params?.slug as unknown as string;
   let page;

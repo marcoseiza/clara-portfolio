@@ -1,97 +1,106 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useTina } from "tinacms/dist/edit-state";
 import client from "../.tina/__generated__/client";
-import ArtGallerySeries from "../components/ArtGallerySeries";
-import ArtPiece from "../components/ArtPiece";
-import Header from "../components/header/Header";
 import {
-  ArtSeries,
+  Index as PageInfo,
+  IndexQuery,
+  IndexQueryVariables,
+} from "../.tina/__generated__/types";
+import ArtGallerySeries from "../components/ArtGallerySeries";
+import Header from "../components/header/Header";
+import { ErrorProps, isError, makeError } from "../helpers";
+import { ArtSeries } from "../helpers/ArtGallery.types";
+import {
+  fillSeriesWithArt,
   filterArtByTags,
+  getSeries,
+  getSeriesDisplayInstructions,
   getTagsFromArtSeriesList,
-} from "../helpers/ArtGallery.types";
-import { defaultArtSeries } from "../helpers/DefaultArtGallery";
+  hasNoArt,
+  parseSeriesDisplayInstructions,
+} from "../helpers/ArtGalleryHelpers";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
 import { useHeaderHeight, useTags } from "../store";
+import Error from "../components/Error";
+import MaybeImage from "../components/MaybeImage";
+import BaseLayout from "../components/BaseLayout";
 
-interface ArtPiece {
-  src: string;
-  title: string;
-  series: { name: string; id: string };
-  link: string;
+interface ServerSideProps {
+  series: ArtSeries[];
+  data: IndexQuery;
+  variables: IndexQueryVariables;
+  query: string;
 }
 
-interface StaticProps {
-  art: ArtPiece[];
-}
+const Home: NextPage<ServerSideProps> = (
+  props: ServerSideProps | ErrorProps
+) => {
+  if (isError(props))
+    return <Error code={props.error.code} title={props.error.message} />;
 
-const Home: NextPage<StaticProps> = ({ art }: StaticProps) => {
+  const { data, variables, query } = props;
+  let [series, setSeries] = useState<ArtSeries[]>(props.series);
+  const page = useTina({ query, variables, data });
+  const pageInfo = page.data.index as PageInfo | undefined;
+
   useEffect(() => {
-    useTags.setState({ tags: getTagsFromArtSeriesList(defaultArtSeries) });
-  }, []);
+    const instructions = getSeriesDisplayInstructions(pageInfo);
+    setSeries(parseSeriesDisplayInstructions(instructions, props.series));
+  }, [pageInfo]);
+
+  useEffect(() => {
+    useTags.setState({ tags: getTagsFromArtSeriesList(series) });
+  }, [series]);
 
   const { filteredArt, noArt } = useTags((state) => {
-    let filteredArt = filterArtByTags(defaultArtSeries, state.chosenTags);
-    return {
-      filteredArt,
-      noArt:
-        filteredArt.length == 0 || filteredArt.every((v) => v.art.length == 0),
-    };
+    let filteredArt = filterArtByTags(series, state.chosenTags);
+    return { filteredArt, noArt: hasNoArt(filteredArt) };
   });
-
-  const headerHeight = useHeaderHeight((state) => state.height);
 
   const [scrollAnchor, touched] = useTouchTop(true);
 
   return (
-    <>
-      <Header isGallery={touched} />
-      <div className="md:container px-5 mx-auto">
-        <div
-          className="w-full h-[calc(100vh-var(--headerHeight)-2em)] mx-auto mt-[var(--headerHeight)] bg-[url('/img/default_image_1.png')] bg-center bg-no-repeat bg-cover"
-          style={{ [`--headerHeight` as any]: `${headerHeight}px` }}
-        />
-        <div
-          ref={scrollAnchor}
-          id="gallery"
-          className={`pt-4 pb-20 min-h-screen ${
-            noArt && "flex items-center justify-center"
-          }`}
-        >
-          {noArt && (
-            <h1 className="text-xl max-w-xs text-center">
-              There are no pieces in the gallery with those tags.
-            </h1>
-          )}
-          {filteredArt.map((series, i) => {
-            if (series.art.length > 0) {
-              return <ArtGallerySeries key={i} series={series} />;
-            }
-            return <></>;
-          })}
-        </div>
+    <BaseLayout isGallery={touched}>
+      <MaybeImage
+        src={pageInfo?.image}
+        className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
+      />
+      <div
+        ref={scrollAnchor}
+        id="gallery"
+        className={`pt-4 pb-20 min-h-screen ${
+          noArt && "flex items-center justify-center"
+        }`}
+      >
+        {noArt && (
+          <h1 className="text-xl max-w-xs text-center">
+            There are no pieces in the gallery with those tags.
+          </h1>
+        )}
+        {filteredArt.map((series, i) =>
+          series.art.length > 0 ? (
+            <ArtGallerySeries key={i} series={series} />
+          ) : null
+        )}
       </div>
-    </>
+    </BaseLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<StaticProps> = async () => {
-  const art = (await client.queries.artConnection()).data.artConnection.edges
-    ?.map((v) => {
-      if (!v?.node) return;
-      return {
-        src: v.node.src,
-        title: v.node.title,
-        series: v.node.series,
-        link: v.node._sys.filename,
-      } as ArtPiece;
-    })
-    .filter((v): v is ArtPiece => v != undefined);
+export const getServerSideProps: GetServerSideProps<
+  ServerSideProps | ErrorProps
+> = async () => {
+  const series = await getSeries();
+  await fillSeriesWithArt(series);
 
-  return {
-    props: {
-      art: art ?? [],
-    },
-  };
+  try {
+    var page = await client.queries.index({ relativePath: `index.mdx` });
+  } catch (e) {
+    return { props: makeError(500, "Server error while loading content.") };
+  }
+
+  return { props: { series, ...page } };
 };
 
 export default Home;

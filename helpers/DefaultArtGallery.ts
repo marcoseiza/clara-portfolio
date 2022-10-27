@@ -3,6 +3,7 @@ import { ArtSeries, ArtTagType, AVAILABLE, SOLD } from "./ArtGallery.types";
 export const defaultArtSeries: ArtSeries[] = [
   {
     name: { body: "Series I", type: ArtTagType.SERIES },
+    id: "series_I",
     order: 0,
     art: [
       {
@@ -39,6 +40,7 @@ export const defaultArtSeries: ArtSeries[] = [
   },
   {
     name: { body: "Series II", type: ArtTagType.SERIES },
+    id: "series_II",
     order: 1,
     art: [
       {
@@ -75,6 +77,7 @@ export const defaultArtSeries: ArtSeries[] = [
   },
   {
     name: { body: "Series III", type: ArtTagType.SERIES },
+    id: "series_III",
     order: 2,
     art: [
       {
