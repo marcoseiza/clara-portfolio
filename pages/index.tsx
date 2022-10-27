@@ -8,7 +8,6 @@ import {
   IndexQueryVariables,
 } from "../.tina/__generated__/types";
 import ArtGallerySeries from "../components/ArtGallerySeries";
-import Header from "../components/header/Header";
 import { ErrorProps, isError, makeError } from "../helpers";
 import { ArtSeries } from "../helpers/ArtGallery.types";
 import {
@@ -21,7 +20,7 @@ import {
   parseSeriesDisplayInstructions,
 } from "../helpers/ArtGalleryHelpers";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
-import { useHeaderHeight, useTags } from "../store";
+import { useTags } from "../store";
 import Error from "../components/Error";
 import MaybeImage from "../components/MaybeImage";
 import BaseLayout from "../components/BaseLayout";
@@ -38,9 +37,10 @@ const Home: NextPage<ServerSideProps> = (
 ) => {
   if (isError(props))
     return <Error code={props.error.code} title={props.error.message} />;
-
   const { data, variables, query } = props;
+
   let [series, setSeries] = useState<ArtSeries[]>(props.series);
+
   const page = useTina({ query, variables, data });
   const pageInfo = page.data.index as PageInfo | undefined;
 

@@ -7,7 +7,7 @@ import {
 } from "../../.tina/__generated__/types";
 import MaybeImage from "../../components/MaybeImage";
 import MaybeBody from "../../components/MaybeBody";
-import { maxCSS, ErrorProps, isError } from "../../helpers";
+import { maxCSS, ErrorProps, isError, makeError } from "../../helpers";
 import { GetServerSideProps } from "next/types";
 import Error from "../../components/Error";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -80,23 +80,14 @@ export const getServerSideProps: GetServerSideProps<
   ServerSideProps | ErrorProps
 > = async (context) => {
   const slug = context.params?.slug as unknown as string;
-  let page;
+
   try {
-    page = await client.queries.art({ relativePath: `${slug}.mdx` });
+    var page = await client.queries.art({ relativePath: `${slug}.mdx` });
   } catch (e) {
-    return {
-      props: {
-        error: {
-          code: 400,
-          message: "Art Piece Not Found.",
-        },
-      },
-    };
+    return { props: makeError(400, "Art Piece Not Found.") };
   }
 
-  return {
-    props: page,
-  };
+  return { props: page };
 };
 
 export default Art;
