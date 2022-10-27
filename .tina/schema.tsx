@@ -26,7 +26,8 @@ const schema = defineSchema({
       path: "content/index",
       format: "mdx",
       ui: {
-        router: () => "/",
+        router: ({ document }) =>
+          document._sys.filename == "index" ? "/home" : undefined,
       },
       fields: [
         {
