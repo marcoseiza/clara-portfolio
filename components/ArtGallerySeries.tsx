@@ -50,8 +50,8 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
           columnClassName="flex flex-col bg-clip-padding gap-5 w-full"
         >
           {series.art.map((info, i) => (
-            <motion.div {...popUp(i * 0.01 + seriesOffsetDelay)}>
-              <ArtPiece key={i} info={info} />
+            <motion.div key={i} {...popUp(i * 0.01 + seriesOffsetDelay)}>
+              <ArtPiece info={info} />
             </motion.div>
           ))}
         </Masonry>

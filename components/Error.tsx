@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export interface ErrorProps {
   code: number;
   title: string;
@@ -11,12 +13,12 @@ const Error = ({ code, title }: ErrorProps) => {
       </h1>
       <p className="text-white">
         Go back{" "}
-        <a
+        <Link
           href="/"
           className="text-neutral-400 hover:text-neutral-200 transition-colors"
         >
           home
-        </a>
+        </Link>
         .
       </p>
     </div>

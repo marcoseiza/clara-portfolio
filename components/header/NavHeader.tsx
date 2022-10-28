@@ -1,13 +1,15 @@
+import Link from "next/link";
+
 const NavHeader = () => {
   return (
     <>
       <h1 className="text-2xl font-bold">
-        <a href="/">CLARA EIZAYAGA</a>
+        <Link href="/">CLARA EIZAYAGA</Link>
       </h1>
       <nav className="flex items-center gap-4">
-        <a href="/#gallery">GALLERY</a>
-        <a href="/about">ABOUT</a>
-        <a href="/contact">CONTACT</a>
+        <Link href="/#gallery">GALLERY</Link>
+        <Link href="/about">ABOUT</Link>
+        <Link href="/contact">CONTACT</Link>
       </nav>
     </>
   );

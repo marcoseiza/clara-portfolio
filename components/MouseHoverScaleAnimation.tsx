@@ -1,6 +1,7 @@
 import {
   MouseEventHandler,
   PropsWithChildren,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -32,17 +33,17 @@ const MouseHoverScaleAnimation = ({
   const translateX = useTransform(x, [0, width], clamp);
   const translateY = useTransform(y, [0, height], clamp);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     x.set(width / 2);
     y.set(height / 2);
     animateX?.stop();
     animateY?.stop();
-  };
+  }, [x, y, width, height, animateX, animateY]);
 
   useEffect(() => {
     if (width == 0 || height == 0) return;
     reset();
-  }, [width, height]);
+  }, [width, height, reset]);
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
     const { left, top } = e.currentTarget.getBoundingClientRect();

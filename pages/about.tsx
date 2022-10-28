@@ -5,6 +5,7 @@ import { PropsWithPage } from "./_app";
 import { motion } from "framer-motion";
 import Instagram from "../components/Instagram";
 import { popUp } from "../helpers/PopUp";
+import Image from "next/image";
 
 interface ServerSideProps {}
 
@@ -20,19 +21,22 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = (
         <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50">
           ABOUT ME
         </h1>
-        <img
+        <Image
           src="/img/clara-about.jpeg"
           alt="Profile picture"
           className="h-full w-full min-w-[90px] object-cover object-right opacity-60"
         />
       </motion.div>
       <div className="relative h-full w-1/2 min-w-[520px] flex flex-col items-center p-10 justify-between">
-        <motion.p className="text-3xl font-light leading-10" {...popUp(0.2)}>
-          Clara Eizayaga is a 27 year old artist. She is an architect and alumna
-          of Cornell University's professional architecture program and is
-          currently focusing on studying nature's beauty through thick acrylic
-          layers, strokes, and colors, representing nature's timeless state.
-        </motion.p>
+        <motion.div {...popUp(0.2)}>
+          <p className="text-3xl font-light leading-10">
+            Clara is a 27 year old artist. She is an architect and alumna of
+            Cornell University&apos;s professional architecture program. Her
+            current focus is in studying nature&apos;s beauty through thick
+            acrylic layers, strokes and colors, representing nature&apos;s
+            timeless state.
+          </p>
+        </motion.div>
         <motion.div {...popUp(0.4)}>
           <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />
         </motion.div>

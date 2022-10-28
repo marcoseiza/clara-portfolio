@@ -8,7 +8,7 @@ import {
   IndexQueryVariables,
 } from "../.tina/__generated__/types";
 import ArtGallerySeries from "../components/ArtGallerySeries";
-import { ErrorProps, isError, makeError } from "../helpers";
+import { ErrorProps, makeError } from "../helpers";
 import { ArtSeries } from "../helpers/ArtGallery.types";
 import {
   fillSeriesWithArt,
@@ -21,12 +21,11 @@ import {
 } from "../helpers/ArtGalleryHelpers";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
 import { useTags } from "../store";
-import Error from "../components/Error";
 import MaybeImage from "../components/MaybeImage";
-import BaseLayout from "../components/BaseLayout";
 import useElementSize from "../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../components/MouseHoverScaleAnimation";
 import { PropsWithPage } from "./_app";
+import withError from "../helpers/withError";
 
 interface ServerSideProps {
   series: ArtSeries[];
@@ -35,13 +34,13 @@ interface ServerSideProps {
   query: string;
 }
 
-const Home: NextPage<PropsWithPage<ServerSideProps>> = (
-  props: PropsWithPage<ServerSideProps> | ErrorProps
-) => {
-  if (isError(props))
-    return <Error code={props.error.code} title={props.error.message} />;
-  const { data, variables, query, setIsGallery } = props;
-
+const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
+  data,
+  variables,
+  query,
+  setIsGallery,
+  ...props
+}: PropsWithPage<ServerSideProps>) => {
   let [series, setSeries] = useState<ArtSeries[]>(props.series);
 
   const page = useTina({ query, variables, data });
@@ -50,7 +49,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = (
   useEffect(() => {
     const instructions = getSeriesDisplayInstructions(pageInfo);
     setSeries(parseSeriesDisplayInstructions(instructions, props.series));
-  }, [pageInfo]);
+  }, [pageInfo, props.series]);
 
   useEffect(() => {
     useTags.setState({ tags: getTagsFromArtSeriesList(series) });
@@ -61,9 +60,9 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = (
     return { filteredArt, noArt: hasNoArt(filteredArt) };
   });
   const [scrollAnchor, touched] = useTouchTop(true);
-  useEffect(() => setIsGallery(touched), [touched]);
+  useEffect(() => setIsGallery(touched), [touched, setIsGallery]);
 
-  const [imageRef, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize<HTMLDivElement>();
 
   return (
     <>
@@ -71,7 +70,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = (
         <MaybeImage
           src={pageInfo?.image}
           className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
-          imageRef={imageRef}
+          refSet={ref}
         />
       </MouseHoverScaleAnimation>
       <div
@@ -111,4 +110,4 @@ export const getServerSideProps: GetServerSideProps<
   return { props: { series, ...page } };
 };
 
-export default Home;
+export default withError(Home);

@@ -13,6 +13,7 @@ import Error from "../../components/Error";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { motion, LayoutGroup } from "framer-motion";
 import { popUp } from "../../helpers/PopUp";
+import withError from "../../helpers/withError";
 
 interface ServerSideProps {
   data: ArtQuery;
@@ -20,11 +21,7 @@ interface ServerSideProps {
   query: string;
 }
 
-const Art = (props: ServerSideProps | ErrorProps) => {
-  if (isError(props))
-    return <Error code={props.error.code} title={props.error.message} />;
-
-  const { data, variables, query } = props;
+const Art = ({ data, variables, query }: ServerSideProps) => {
   const page = useTina({ query, variables, data });
 
   const art = page.data?.art as ArtInfo;
@@ -72,9 +69,8 @@ const Art = (props: ServerSideProps | ErrorProps) => {
       >
         <LayoutGroup>
           {art.altImages?.map((img, ii) => (
-            <motion.div {...popUp(ii * 0.1)}>
+            <motion.div key={ii} {...popUp(ii * 0.1)}>
               <MaybeImage
-                key={ii}
                 src={img?.src}
                 alt="Alternative Image"
                 className="w-[var(--imgWidth)]"
@@ -101,4 +97,4 @@ export const getServerSideProps: GetServerSideProps<
   return { props: page };
 };
 
-export default Art;
+export default withError(Art);

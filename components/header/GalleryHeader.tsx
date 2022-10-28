@@ -4,6 +4,7 @@ import { useHeaderHeight, useTags } from "../../store";
 import GalleryOptions from "./GalleryOptions";
 import Tag from "./Tag";
 import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const GalleryHeader = () => {
   const { tags, chosenTags, removeTag } = useTags((state) => ({
@@ -21,9 +22,9 @@ const GalleryHeader = () => {
 
   return (
     <>
-      <a href="/#gallery" className="text-2xl font-bold">
+      <Link href="/#gallery" className="text-2xl font-bold">
         GALLERY
-      </a>
+      </Link>
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
           {chosenTags.map((t, i) => (
