@@ -24,6 +24,9 @@ import { useTags } from "../store";
 import Error from "../components/Error";
 import MaybeImage from "../components/MaybeImage";
 import BaseLayout from "../components/BaseLayout";
+import useElementSize from "../helpers/hooks/UseElementSize";
+import MouseHoverScaleAnimation from "../components/MouseHoverScaleAnimation";
+import { PropsWithPage } from "./_app";
 
 interface ServerSideProps {
   series: ArtSeries[];
@@ -32,12 +35,12 @@ interface ServerSideProps {
   query: string;
 }
 
-const Home: NextPage<ServerSideProps> = (
-  props: ServerSideProps | ErrorProps
+const Home: NextPage<PropsWithPage<ServerSideProps>> = (
+  props: PropsWithPage<ServerSideProps> | ErrorProps
 ) => {
   if (isError(props))
     return <Error code={props.error.code} title={props.error.message} />;
-  const { data, variables, query } = props;
+  const { data, variables, query, setIsGallery } = props;
 
   let [series, setSeries] = useState<ArtSeries[]>(props.series);
 
@@ -57,15 +60,20 @@ const Home: NextPage<ServerSideProps> = (
     let filteredArt = filterArtByTags(series, state.chosenTags);
     return { filteredArt, noArt: hasNoArt(filteredArt) };
   });
-
   const [scrollAnchor, touched] = useTouchTop(true);
+  useEffect(() => setIsGallery(touched), [touched]);
+
+  const [imageRef, size] = useElementSize<HTMLImageElement>();
 
   return (
-    <BaseLayout isGallery={touched}>
-      <MaybeImage
-        src={pageInfo?.image}
-        className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
-      />
+    <>
+      <MouseHoverScaleAnimation size={size}>
+        <MaybeImage
+          src={pageInfo?.image}
+          className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
+          imageRef={imageRef}
+        />
+      </MouseHoverScaleAnimation>
       <div
         ref={scrollAnchor}
         id="gallery"
@@ -80,11 +88,11 @@ const Home: NextPage<ServerSideProps> = (
         )}
         {filteredArt.map((series, i) =>
           series.art.length > 0 ? (
-            <ArtGallerySeries key={i} series={series} />
+            <ArtGallerySeries key={i} series={series} order={i} />
           ) : null
         )}
       </div>
-    </BaseLayout>
+    </>
   );
 };
 

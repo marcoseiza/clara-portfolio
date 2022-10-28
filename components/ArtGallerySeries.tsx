@@ -4,12 +4,15 @@ import { ArtSeries } from "../helpers/ArtGallery.types";
 import useEventListener from "../helpers/hooks/UseEventListener";
 import { useHeaderHeight } from "../store";
 import ArtPiece from "./ArtPiece";
+import { motion } from "framer-motion";
+import { popUp } from "../helpers/PopUp";
 
 export interface ArtGallerySeriesProps {
   series: ArtSeries;
+  order: number;
 }
 
-const ArtGallerySeries = ({ series }: ArtGallerySeriesProps) => {
+const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
   const headerHeight = useHeaderHeight((state) => state.height);
 
   const [titleRef, setTitleRef] = useState<HTMLElement | null>(null);
@@ -23,18 +26,21 @@ const ArtGallerySeries = ({ series }: ArtGallerySeriesProps) => {
 
   useEventListener("resize", handleSize);
 
+  const seriesOffsetDelay = series.art.length * order * 0.05;
+
   return (
     <div className="flex flex-wrap mt-20 gap-5">
       <div className="h-auto" ref={setTitleRef}>
         {series.name && (
-          <h2
+          <motion.h2
             className={`${
               !titleTop && "vertical-text"
             } sticky top-[calc(var(--header-height)+0.5em)] text-4xl font-bold uppercase mb-5`}
             style={{ ["--header-height" as any]: `${headerHeight}px` }}
+            {...popUp(seriesOffsetDelay)}
           >
             {series.name.body}
-          </h2>
+          </motion.h2>
         )}
       </div>
       <div className="grow" ref={setMasonryRef}>
@@ -44,7 +50,9 @@ const ArtGallerySeries = ({ series }: ArtGallerySeriesProps) => {
           columnClassName="flex flex-col bg-clip-padding gap-5 w-full"
         >
           {series.art.map((info, i) => (
-            <ArtPiece key={i} info={info} />
+            <motion.div {...popUp(i * 0.01 + seriesOffsetDelay)}>
+              <ArtPiece key={i} info={info} />
+            </motion.div>
           ))}
         </Masonry>
       </div>

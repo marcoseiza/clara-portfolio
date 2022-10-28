@@ -1,27 +1,33 @@
 import { useEffect } from "react";
-import { useState } from "react";
 import { useHeaderHeight } from "../../store";
 import GalleryHeader from "./GalleryHeader";
 import NavHeader from "./NavHeader";
-import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import useScroll from "../../helpers/hooks/UseScroll";
+import useElementSize from "../../helpers/hooks/UseElementSize";
 
 export interface HeaderProps {
   isGallery?: boolean;
 }
 
 const Header = ({ isGallery }: HeaderProps) => {
-  const [headerHeight, setHeaderHeight] = useState<number>(0);
-
-  useEffect(() => {
-    useHeaderHeight.setState({ height: headerHeight });
-  }, [headerHeight]);
-
   const HeaderImpl = isGallery ? GalleryHeader : NavHeader;
 
+  const scrollY = useScroll();
+
+  const [headerRef, { height }] = useElementSize();
+  useEffect(() => {
+    useHeaderHeight.setState({ height });
+  }, [height]);
+
   return (
-    <AnimateSharedLayout>
-      <HeaderImpl passHeight={setHeaderHeight} />
-    </AnimateSharedLayout>
+    <header
+      ref={headerRef}
+      className={`fixed w-full top-0 py-4 px-8 bg-white flex items-center justify-between z-50 ${
+        scrollY == 0 ? "" : "shadow-lg"
+      } transition-shadow`}
+    >
+      <HeaderImpl />
+    </header>
   );
 };
 

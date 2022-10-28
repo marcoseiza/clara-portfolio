@@ -1,17 +1,24 @@
 import { ArtInfo } from "../helpers/ArtGallery.types";
+import useElementSize from "../helpers/hooks/UseElementSize";
+import MouseHoverScaleAnimation from "./MouseHoverScaleAnimation";
 
 export interface ArtPieceProps {
   info: ArtInfo;
 }
 
 const ArtPiece = ({ info }: ArtPieceProps) => {
+  const [ref, size] = useElementSize<HTMLImageElement>();
+
   return (
-    <a
-      href={`/art/${info.slug}`}
-      className="hover:scale-[1.02] transition-transform"
+    <MouseHoverScaleAnimation
+      size={size}
+      scale={1.03}
+      className="w-full h-full"
     >
-      <img src={info.src} alt="" className="w-full" />
-    </a>
+      <a href={`/art/${info.slug}`}>
+        <img src={info.src} alt="" className="object-cover h-full" ref={ref} />
+      </a>
+    </MouseHoverScaleAnimation>
   );
 };
 

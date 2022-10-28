@@ -11,7 +11,8 @@ import { maxCSS, ErrorProps, isError, makeError } from "../../helpers";
 import { GetServerSideProps } from "next/types";
 import Error from "../../components/Error";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import BaseLayout from "../../components/BaseLayout";
+import { motion, LayoutGroup } from "framer-motion";
+import { popUp } from "../../helpers/PopUp";
 
 interface ServerSideProps {
   data: ArtQuery;
@@ -28,21 +29,27 @@ const Art = (props: ServerSideProps | ErrorProps) => {
 
   const art = page.data?.art as ArtInfo;
 
-  function renderContent(art: ArtInfo) {
-    return (
-      <div className="flex flex-col gap-5">
-        <div
-          className="flex flex-wrap gap-5 items-start"
-          style={{ ["--imgWidth" as any]: maxCSS(800, "100%") }}
-        >
+  if (!art) return <></>;
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div
+        className="flex flex-wrap gap-5 items-start"
+        style={{ ["--imgWidth" as any]: maxCSS(800, "100%") }}
+      >
+        <motion.div {...popUp()}>
           <MaybeImage
             src={art.src}
             alt="Banner Image"
             className="w-[var(--imgWidth)]"
           />
-          <div>
-            <div className="prose">
-              <h1 className="mb-4 uppercase">{art.title}</h1>
+        </motion.div>
+        <div>
+          <div className="prose">
+            <motion.h1 className="mb-4 uppercase" {...popUp(0.1)}>
+              {art.title}
+            </motion.h1>
+            <motion.div {...popUp(0.15)}>
               {art.hasPrice ? (
                 <h3 className="mt-4 mb-3">${art.price?.toLocaleString()}</h3>
               ) : (
@@ -50,30 +57,34 @@ const Art = (props: ServerSideProps | ErrorProps) => {
                   Contact the seller for price.
                 </h4>
               )}
-            </div>
+            </motion.div>
+          </div>
+          <motion.div {...popUp(0.2)}>
             <MaybeBody>
               <TinaMarkdown content={art.body} />
             </MaybeBody>
-          </div>
-        </div>
-        <div
-          className="flex flex-col gap-5"
-          style={{ ["--imgWidth" as any]: maxCSS(600, "100%") }}
-        >
-          {art.altImages?.map((img, ii) => (
-            <MaybeImage
-              key={ii}
-              src={img?.src}
-              alt="Alternative Image"
-              className="w-[var(--imgWidth)]"
-            />
-          ))}
+          </motion.div>
         </div>
       </div>
-    );
-  }
-
-  return <BaseLayout>{art && renderContent(art)}</BaseLayout>;
+      <div
+        className="flex flex-col gap-5"
+        style={{ ["--imgWidth" as any]: maxCSS(600, "100%") }}
+      >
+        <LayoutGroup>
+          {art.altImages?.map((img, ii) => (
+            <motion.div {...popUp(ii * 0.1)}>
+              <MaybeImage
+                key={ii}
+                src={img?.src}
+                alt="Alternative Image"
+                className="w-[var(--imgWidth)]"
+              />
+            </motion.div>
+          ))}
+        </LayoutGroup>
+      </div>
+    </div>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<
