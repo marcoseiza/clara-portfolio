@@ -62,7 +62,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   const [scrollAnchor, touched] = useTouchTop(true);
   useEffect(() => setIsGallery(touched), [touched, setIsGallery]);
 
-  const [ref, size] = useElementSize<HTMLDivElement>();
+  const [ref, size] = useElementSize<HTMLImageElement>();
 
   return (
     <>
@@ -70,7 +70,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
         <MaybeImage
           src={pageInfo?.image}
           className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
-          refSet={ref}
+          imageRef={ref}
         />
       </MouseHoverScaleAnimation>
       <div

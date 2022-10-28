@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArtInfo } from "../helpers/ArtGallery.types";
 import useElementSize from "../helpers/hooks/UseElementSize";
@@ -9,7 +8,7 @@ export interface ArtPieceProps {
 }
 
 const ArtPiece = ({ info }: ArtPieceProps) => {
-  const [ref, size] = useElementSize<HTMLAnchorElement>();
+  const [ref, size] = useElementSize<HTMLImageElement>();
 
   return (
     <MouseHoverScaleAnimation
@@ -17,8 +16,13 @@ const ArtPiece = ({ info }: ArtPieceProps) => {
       scale={1.03}
       className="w-full h-full"
     >
-      <Link href={`/art/${info.slug}`} ref={ref}>
-        <Image src={info.src} alt="Art Piece" className="object-cover h-full" />
+      <Link href={`/art/${info.slug}`}>
+        <img
+          ref={ref}
+          src={info.src}
+          alt="Art Piece"
+          className="object-cover h-full"
+        />
       </Link>
     </MouseHoverScaleAnimation>
   );

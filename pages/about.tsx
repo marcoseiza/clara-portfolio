@@ -5,7 +5,6 @@ import { PropsWithPage } from "./_app";
 import { motion } from "framer-motion";
 import Instagram from "../components/Instagram";
 import { popUp } from "../helpers/PopUp";
-import Image from "next/image";
 
 interface ServerSideProps {}
 
@@ -21,7 +20,7 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = (
         <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50">
           ABOUT ME
         </h1>
-        <Image
+        <img
           src="/img/clara-about.jpeg"
           alt="Profile picture"
           className="h-full w-full min-w-[90px] object-cover object-right opacity-60"

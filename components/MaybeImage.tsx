@@ -1,17 +1,16 @@
-import Image from "next/image";
 import { Maybe } from "../.tina/__generated__/types";
 
 export interface MaybeImageProps
   extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> {
   src?: Maybe<string>;
-  refSet?: (node: HTMLDivElement | null) => void;
+  imageRef?: (node: HTMLImageElement | null) => void;
 }
 
-const MaybeImage = ({ src, alt, className, refSet }: MaybeImageProps) => {
+const MaybeImage = ({ src, alt, className, imageRef }: MaybeImageProps) => {
   if (!src) return <></>;
   return (
-    <div ref={refSet}>
-      <Image src={src} alt={alt} className={className} />
+    <div>
+      <img ref={imageRef} src={src} alt={alt} className={className} />
     </div>
   );
 };
