@@ -21,7 +21,7 @@ const FormField = ({
   return (
     <div className="relative mb-4">
       <label
-        className="absolute block -top-[0.6em] left-4 bg-white text-gray-700 px-2 text-sm font-bold mb-2 uppercase"
+        className="absolute block -top-[0.6em] left-4 bg-white text-gray-700 px-2 text-sm font-bold mb-2 uppercase rounded-md"
         htmlFor={id}
       >
         {label}

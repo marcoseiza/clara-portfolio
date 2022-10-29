@@ -48,7 +48,6 @@ const MouseHoverScaleAnimation = ({
 
   const handleMouseLeave = () => reset();
 
-  console.log(translateX.get(), translateY.get());
   return (
     <motion.div
       onMouseMove={handleMouseMove}
