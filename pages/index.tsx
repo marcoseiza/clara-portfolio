@@ -27,8 +27,14 @@ import MouseHoverScaleAnimation from "../components/MouseHoverScaleAnimation";
 import { PropsWithPage } from "./_app";
 import withError from "../helpers/withError";
 import Link from "next/link";
-import { CaretUp } from "phosphor-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { CaretDown, CaretUp } from "phosphor-react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useSetTimeout } from "../helpers/hooks/UseSetTimeout";
 import { popUp } from "../helpers/PopUp";
 
 interface ServerSideProps {
@@ -68,32 +74,65 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
 
   const [ref, size] = useElementSize<HTMLImageElement>();
 
+  const { scrollYProgress } = useScroll();
+
+  const imageScale = useTransform(
+    scrollYProgress,
+    [0, 0.1, 1],
+    [1.0, 0.94, 0.94]
+  );
+
+  const [showScroll, setShowScroll] = useState<boolean>(false);
+
+  useSetTimeout(() => setShowScroll(true), 2000, [setShowScroll]);
+  scrollYProgress.onChange(
+    () => scrollYProgress.get() != 0 && setShowScroll(false)
+  );
+
   return (
     <>
-      <MouseHoverScaleAnimation size={size}>
-        <MaybeImage
-          src={pageInfo?.image}
-          className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] mx-auto object-cover"
-          imageRef={ref}
-        />
-      </MouseHoverScaleAnimation>
-      <div
-        ref={scrollAnchor}
-        id="gallery"
-        className={`pt-4 pb-20 min-h-screen ${
-          noArt && "flex items-center justify-center"
-        }`}
-      >
-        {noArt && (
-          <h1 className="text-xl max-w-xs text-center">
-            There are no pieces in the gallery with those tags.
-          </h1>
-        )}
-        {filteredArt.map((series, i) =>
-          series.art.length > 0 ? (
-            <ArtGallerySeries key={i} series={series} order={i} />
-          ) : null
-        )}
+      <motion.div style={{ scale: imageScale }} className="relative">
+        <MouseHoverScaleAnimation size={size} scale={1.04}>
+          <MaybeImage
+            src={pageInfo?.image}
+            className="w-full h-[100vh] mx-auto object-cover"
+            imageRef={ref}
+          />
+        </MouseHoverScaleAnimation>
+        <AnimatePresence>
+          {showScroll && (
+            <motion.div
+              className="absolute z-50 bottom-10 right-[50%] -translate-x-[50%] flex flex-col gap-1 items-center"
+              initial={{ y: 100, opacity: 0.1 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 0, opacity: 0 }}
+              transition={{ ease: "easeInOut", duration: 0.5 }}
+            >
+              Scroll
+              <CaretDown size={24} weight="bold" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+      <div className="md:container px-5 mx-auto pt-[var(--headerHeight)]">
+        <div
+          ref={scrollAnchor}
+          id="gallery"
+          className={`pt-4 pb-20 min-h-screen ${
+            noArt && "flex items-center justify-center"
+          }`}
+        >
+          {noArt && (
+            <h1 className="text-xl max-w-xs text-center">
+              There are no pieces in the gallery with those tags.
+            </h1>
+          )}
+          {filteredArt.map((series, i) =>
+            series.art.length > 0 ? (
+              <ArtGallerySeries key={i} series={series} order={i} />
+            ) : null
+          )}
+        </div>
       </div>
       <AnimatePresence>
         {touched && (
@@ -135,4 +174,7 @@ export const getServerSideProps: GetServerSideProps<
   return { props: { series, ...page } };
 };
 
-export default withError(Home);
+const HomeWithError = withError(Home);
+(HomeWithError as any).noContainer = true;
+
+export default HomeWithError;

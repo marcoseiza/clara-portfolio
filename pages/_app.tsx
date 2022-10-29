@@ -13,10 +13,10 @@ export interface PageProps {
 export type PropsWithPage<T> = T & PageProps;
 
 const App = ({ Component, pageProps, router }: AppProps) => {
-  // const [showBaseLayout, setShowBaseLayout] = useState<boolean>(true);
   const [isGallery, setIsGallery] = useState<boolean>(false);
 
   const noBaseLayout = !!(Component as any).noBaseLayout;
+  const noContainer = !!(Component as any).noContainer;
 
   useEffect(() => {
     setIsGallery(false);
@@ -39,7 +39,9 @@ const App = ({ Component, pageProps, router }: AppProps) => {
   return (
     <Tina>
       {!noBaseLayout ? (
-        <BaseLayout isGallery={isGallery}>{content()}</BaseLayout>
+        <BaseLayout isGallery={isGallery} container={!noContainer}>
+          {content()}
+        </BaseLayout>
       ) : (
         content()
       )}

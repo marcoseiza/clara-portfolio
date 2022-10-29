@@ -4,10 +4,12 @@ import Header from "./header/Header";
 
 export interface BaseLayoutProps {
   isGallery?: boolean;
+  container?: boolean;
 }
 
 const BaseLayout = ({
   isGallery = false,
+  container = true,
   children,
 }: PropsWithChildren<BaseLayoutProps>) => {
   const headerHeight = useHeaderHeight((s) => s.height);
@@ -15,7 +17,9 @@ const BaseLayout = ({
     <>
       <Header isGallery={isGallery} />
       <div
-        className="relative md:container px-5 mx-auto pt-[var(--headerHeight)]"
+        className={`relative ${
+          container ? "md:container px-5 mx-auto pt-[var(--headerHeight)]" : ""
+        }`}
         style={{
           [`--headerHeight` as any]: `${headerHeight}px`,
         }}
