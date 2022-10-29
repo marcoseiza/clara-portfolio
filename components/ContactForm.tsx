@@ -4,29 +4,9 @@ import FormField from "./FormField";
 export interface ContactFormProps {}
 
 const ContactForm = ({}: ContactFormProps) => {
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
-    const myForm = event.currentTarget;
-    const formData = new FormData(myForm);
-
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData as any).toString(),
-    })
-      .then(() => console.log("Form successfully submitted"))
-      .catch((error) => alert(error));
-  };
-
   return (
     <div className="w-full px-7 py-9 bg-white border-black border-2 rounded-lg">
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        onSubmit={handleSubmit}
-      >
+      <form name="contact" method="POST" data-netlify="true">
         <input type="hidden" name="form-name" value="contact" />
         <FormField
           id="given-name"
