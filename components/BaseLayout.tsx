@@ -15,7 +15,7 @@ const BaseLayout = ({
   const headerHeight = useHeaderHeight((s) => s.height);
   return (
     <>
-      <Header isGallery={isGallery} />
+      <Header isGallery={isGallery} translucent={!container} />
       <div
         className={`relative ${
           container ? "md:container px-5 mx-auto pt-[var(--headerHeight)]" : ""

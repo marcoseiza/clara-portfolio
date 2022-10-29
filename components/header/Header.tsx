@@ -7,9 +7,10 @@ import useElementSize from "../../helpers/hooks/UseElementSize";
 
 export interface HeaderProps {
   isGallery?: boolean;
+  translucent?: boolean;
 }
 
-const Header = ({ isGallery }: HeaderProps) => {
+const Header = ({ isGallery, translucent = false }: HeaderProps) => {
   const HeaderImpl = isGallery ? GalleryHeader : NavHeader;
 
   const scrollY = useScroll();
@@ -19,11 +20,15 @@ const Header = ({ isGallery }: HeaderProps) => {
     useHeaderHeight.setState({ height });
   }, [height]);
 
+  const inactiveScrollColor = translucent
+    ? "bg-neutral-200/30"
+    : "bg-transparent";
+
   return (
     <header
       ref={headerRef}
       className={`fixed w-full top-0 py-4 px-8 flex items-center justify-between z-50 ${
-        scrollY == 0 ? "bg-neutral-200/30" : "shadow-lg !bg-white"
+        scrollY == 0 ? inactiveScrollColor : "shadow-lg !bg-white"
       } transition-all hover:bg-white`}
     >
       <HeaderImpl />
