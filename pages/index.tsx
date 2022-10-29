@@ -92,7 +92,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   return (
     <>
       <motion.div style={{ scale: imageScale }} className="relative">
-        <MouseHoverScaleAnimation size={size} scale={1.04}>
+        <MouseHoverScaleAnimation size={size} translate={0.003} noScaleOnHover>
           <MaybeImage
             src={pageInfo?.image}
             className="w-full h-[100vh] mx-auto object-cover"

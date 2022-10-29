@@ -10,6 +10,8 @@ import { Size } from "../helpers/hooks/UseElementSize";
 export interface MouseHoverScaleAnimationProps {
   size: Size;
   scale?: number;
+  translate?: number;
+  noScaleOnHover?: boolean;
   className?: string;
 }
 
@@ -17,9 +19,11 @@ const MouseHoverScaleAnimation = ({
   children,
   size: { width, height },
   scale = 1.01,
+  translate = 0.005,
   className = "",
+  noScaleOnHover = false,
 }: PropsWithChildren<MouseHoverScaleAnimationProps>) => {
-  const [hoverScale, transformScale] = [scale, 0.005];
+  const [hoverScale, transformScale] = [scale, translate];
   const delay = 0.2;
   const constraint = Math.min(width * transformScale, height * transformScale);
   const clamp = [constraint, -constraint];
@@ -55,7 +59,8 @@ const MouseHoverScaleAnimation = ({
       className={`overflow-hidden ` + className}
     >
       <motion.div
-        whileHover={{ scale: hoverScale }}
+        whileHover={!noScaleOnHover ? { scale: hoverScale } : {}}
+        initial={noScaleOnHover ? { scale: hoverScale } : {}}
         transition={{ duration: delay }}
         className={className}
       >
