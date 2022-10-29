@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useTina } from "tinacms/dist/edit-state";
 import client from "../.tina/__generated__/client";
@@ -159,7 +159,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   ServerSideProps | ErrorProps
 > = async () => {
   const series = await getSeries();

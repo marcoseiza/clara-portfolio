@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { ErrorProps, makeError } from "../helpers";
 import { PropsWithPage } from "./_app";
 import withError from "../helpers/withError";
@@ -74,7 +74,7 @@ const Contact: NextPage<PropsWithPage<ServerSideProps>> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   ServerSideProps | ErrorProps
 > = async () => {
   try {

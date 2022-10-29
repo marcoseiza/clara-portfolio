@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { ErrorProps, makeError } from "../helpers";
 import { PropsWithPage } from "./_app";
 import { motion } from "framer-motion";
@@ -75,7 +75,7 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   ServerSideProps | ErrorProps
 > = async () => {
   try {
