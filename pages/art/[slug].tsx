@@ -7,9 +7,8 @@ import {
 } from "../../.tina/__generated__/types";
 import MaybeImage from "../../components/MaybeImage";
 import MaybeBody from "../../components/MaybeBody";
-import { maxCSS, ErrorProps, isError, makeError } from "../../helpers";
+import { maxCSS, ErrorProps, makeError } from "../../helpers";
 import { GetServerSideProps } from "next/types";
-import Error from "../../components/Error";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { motion, LayoutGroup } from "framer-motion";
 import { popUp } from "../../helpers/PopUp";

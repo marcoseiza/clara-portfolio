@@ -21,7 +21,8 @@ const ArtPiece = ({ info }: ArtPieceProps) => {
           ref={ref}
           src={info.src}
           alt="Art Piece"
-          className="object-cover h-full"
+          className="object-cover h-full cursor-pointer"
+          draggable="false"
         />
       </Link>
     </MouseHoverScaleAnimation>

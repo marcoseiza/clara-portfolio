@@ -22,8 +22,8 @@ const GalleryHeader = () => {
 
   return (
     <>
-      <Link href="/#gallery" className="text-2xl font-bold">
-        GALLERY
+      <Link href="/#gallery">
+        <span className="text-2xl font-bold">GALLERY</span>
       </Link>
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">

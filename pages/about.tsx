@@ -1,44 +1,75 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { ErrorProps, isError } from "../helpers";
-import Error from "../components/Error";
+import { ErrorProps, makeError } from "../helpers";
 import { PropsWithPage } from "./_app";
 import { motion } from "framer-motion";
 import Instagram from "../components/Instagram";
 import { popUp } from "../helpers/PopUp";
+import {
+  PageQuery,
+  PageQueryVariables,
+  Page as PageInfo,
+} from "../.tina/__generated__/types";
+import client from "../.tina/__generated__/client";
+import withError from "../helpers/withError";
+import { useTina } from "tinacms/dist/edit-state";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+import MaybeBody from "../components/MaybeBody";
+import MaybeImage from "../components/MaybeImage";
 
-interface ServerSideProps {}
+interface ServerSideProps {
+  data: PageQuery;
+  variables: PageQueryVariables;
+  query: string;
+}
 
-const About: NextPage<PropsWithPage<ServerSideProps>> = (
-  props: PropsWithPage<ServerSideProps> | ErrorProps
-) => {
-  if (isError(props))
-    return <Error code={props.error.code} title={props.error.message} />;
+const About: NextPage<PropsWithPage<ServerSideProps>> = ({
+  data,
+  variables,
+  query,
+}: PropsWithPage<ServerSideProps>) => {
+  const page = useTina({ query, variables, data });
+
+  const about = page.data?.page as PageInfo;
+
+  if (!about) return <></>;
+
+  let altImages = about.altImages || [];
+  if (altImages.length > 4) altImages = altImages.slice(0, 4);
 
   return (
-    <div className="w-full h-[calc(100vh-var(--headerHeight)-1.5em)] flex place-items-center">
-      <motion.div className="relative h-full w-1/2" {...popUp()}>
-        <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50">
-          ABOUT ME
+    <div className="grid grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))] min-h-[calc(100vh-var(--headerHeight)-1.5em)]">
+      <motion.div className="relative h-full w-full" {...popUp()}>
+        <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50 uppercase">
+          {about.title}
         </h1>
         <img
-          src="/img/clara-about.jpeg"
+          src={about.image}
           alt="Profile picture"
           className="h-full w-full min-w-[90px] object-cover object-right opacity-60"
         />
       </motion.div>
-      <div className="relative h-full w-1/2 min-w-[520px] flex flex-col items-center p-10 justify-between">
+      <div className="relative h-full w-full flex flex-col items-center p-10 pb-0 justify-between">
         <motion.div {...popUp(0.2)}>
-          <p className="text-3xl font-light leading-10">
-            Clara is a 27 year old artist. She is an architect and alumna of
-            Cornell University&apos;s professional architecture program. Her
-            current focus is in studying nature&apos;s beauty through thick
-            acrylic layers, strokes and colors, representing nature&apos;s
-            timeless state.
-          </p>
+          <MaybeBody className="prose-h1:font-normal">
+            <TinaMarkdown content={about.body} />
+          </MaybeBody>
         </motion.div>
-        <motion.div {...popUp(0.4)}>
-          <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />
-        </motion.div>
+        <div className="flex flex-col gap-2 items-center">
+          <motion.div {...popUp(0.3)}>
+            <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />
+          </motion.div>
+          {about.altImages && (
+            <div className="grid grid-cols-2 w-full gap-4">
+              {altImages.map((v, ii) => {
+                return (
+                  <motion.div key={ii} {...popUp(ii * 0.1 + 0.3)}>
+                    <MaybeImage src={v?.src} alt="Alternative About Pictures" />
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -47,7 +78,13 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = (
 export const getServerSideProps: GetServerSideProps<
   ServerSideProps | ErrorProps
 > = async () => {
-  return { props: {} };
+  try {
+    var page = await client.queries.page({ relativePath: `about.mdx` });
+  } catch (e) {
+    return { props: makeError(400, "Art Piece Not Found.") };
+  }
+
+  return { props: page };
 };
 
-export default About;
+export default withError(About);

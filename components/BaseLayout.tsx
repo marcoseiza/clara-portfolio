@@ -15,7 +15,7 @@ const BaseLayout = ({
     <>
       <Header isGallery={isGallery} />
       <div
-        className="md:container px-5 mx-auto pt-[var(--headerHeight)]"
+        className="relative md:container px-5 mx-auto pt-[var(--headerHeight)]"
         style={{
           [`--headerHeight` as any]: `${headerHeight}px`,
         }}

@@ -69,6 +69,58 @@ const schema = defineSchema({
       ],
     },
     {
+      name: "page",
+      label: "Page",
+      path: "content/page",
+      format: "mdx",
+      ui: {
+        router: ({ document }) => {
+          if (document._sys.filename == "about") return "/about";
+          if (document._sys.filename == "contact") return "/contact";
+        },
+      },
+      fields: [
+        {
+          type: "image",
+          label: "Hero Image",
+          name: "image",
+          required: true,
+        },
+        {
+          type: "string",
+          label: "Title",
+          name: "title",
+          isTitle: true,
+          required: true,
+        },
+        {
+          type: "rich-text",
+          label: "Body",
+          name: "body",
+          isBody: true,
+          required: true,
+        },
+        {
+          type: "object",
+          label: "Alternative Media",
+          name: "altImages",
+          list: true,
+          ui: {
+            itemProps: (item) => {
+              return { label: `Image Path: ${item?.src}` };
+            },
+          },
+          fields: [
+            {
+              type: "image",
+              label: "Image",
+              name: "src",
+            },
+          ],
+        },
+      ],
+    },
+    {
       label: "Art Series",
       name: "series",
       path: "content/series",

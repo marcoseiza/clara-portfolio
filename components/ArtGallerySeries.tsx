@@ -50,7 +50,19 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
           columnClassName="flex flex-col bg-clip-padding gap-5 w-full"
         >
           {series.art.map((info, i) => (
-            <motion.div key={i} {...popUp(i * 0.01 + seriesOffsetDelay)}>
+            <motion.div
+              key={i}
+              whileTap="tap"
+              {...popUp(i * 0.01 + seriesOffsetDelay)}
+              variants={{
+                tap: {
+                  scale: 0.95,
+                  transition: {
+                    duration: 0.15,
+                  },
+                },
+              }}
+            >
               <ArtPiece info={info} />
             </motion.div>
           ))}
