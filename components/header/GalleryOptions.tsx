@@ -20,9 +20,12 @@ const GalleryOptions = ({ headerHeight, tags }: GalleryOptionsProps) => {
     })
   );
 
-  const onOptionChange = (tag: AnyArtTag, checked: boolean) => {
-    checked ? addTag(tag) : removeTag(tag);
-  };
+  const onOptionChange = useCallback(
+    (tag: AnyArtTag, checked: boolean) => {
+      checked ? addTag(tag) : removeTag(tag);
+    },
+    [addTag, removeTag]
+  );
 
   return (
     <motion.div

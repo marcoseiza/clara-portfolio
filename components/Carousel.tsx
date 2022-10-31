@@ -89,14 +89,13 @@ const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
         className="relative flex items-center justify-center z-30"
         style={{ perspective: "200px" }}
       >
-        {all.length > 2 ||
-          (current == 1 && (
-            <ImgPreview
-              onClick={prev}
-              src={all[getPrev(current, all.length)]}
-              position="left"
-            />
-          ))}
+        {(all.length > 2 || current == 1) && (
+          <ImgPreview
+            onClick={prev}
+            src={all[getPrev(current, all.length)]}
+            position="left"
+          />
+        )}
         <li className="relative z-40 m-10" onClick={handleCarousel()}>
           <MouseHoverScaleAnimation
             size={size}
@@ -112,14 +111,13 @@ const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
             />
           </MouseHoverScaleAnimation>
         </li>
-        {all.length > 2 ||
-          (current == 0 && (
-            <ImgPreview
-              onClick={next}
-              src={all[getNext(current, all.length)]}
-              position="right"
-            />
-          ))}
+        {(all.length > 2 || current == 0) && (
+          <ImgPreview
+            onClick={next}
+            src={all[getNext(current, all.length)]}
+            position="right"
+          />
+        )}
       </ul>
       {all.length > 1 ? (
         <Control onClick={next}>

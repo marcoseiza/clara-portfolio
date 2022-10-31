@@ -59,10 +59,10 @@ const MouseHoverScaleAnimation = ({
     setAnimationToggled(!onClick);
   }, [x, y, width, height]);
 
-  const toggleAnimation = () => {
+  const toggleAnimation = useCallback(() => {
     if (animationToggled) reset();
     else setAnimationToggled(!animationToggled);
-  };
+  }, [setAnimationToggled, animationToggled]);
 
   useEffect(() => {
     if (width == 0 || height == 0) return;
@@ -70,14 +70,17 @@ const MouseHoverScaleAnimation = ({
     y.set(height / 2);
   }, [width, height, reset]);
 
-  const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
-    if (!animationToggled) return;
-    const { left, top } = e.currentTarget.getBoundingClientRect();
-    animate(x, e.pageX - left, transition);
-    animate(y, e.pageY - top - window.scrollY, transition);
-  };
+  const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (!animationToggled) return;
+      const { left, top } = e.currentTarget.getBoundingClientRect();
+      animate(x, e.pageX - left, transition);
+      animate(y, e.pageY - top - window.scrollY, transition);
+    },
+    [animate, animationToggled, transition]
+  );
 
-  const handleMouseLeave = () => reset();
+  const handleMouseLeave = useCallback(() => reset(), [reset]);
 
   return (
     <motion.div

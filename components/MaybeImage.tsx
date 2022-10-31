@@ -6,11 +6,16 @@ export interface MaybeImageProps
   imageRef?: (node: HTMLImageElement | null) => void;
 }
 
-const MaybeImage = ({ src, alt, className, imageRef }: MaybeImageProps) => {
+const MaybeImage = ({ src, imageRef, ...props }: MaybeImageProps) => {
   if (!src) return <></>;
   return (
     <div>
-      <img ref={imageRef} src={src} alt={alt} className={className} />
+      <img
+        ref={imageRef}
+        src={src}
+        {...props}
+        onLoad={() => console.log("load")}
+      />
     </div>
   );
 };

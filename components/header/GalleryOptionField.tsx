@@ -1,4 +1,5 @@
 import { CheckSquare, Square } from "phosphor-react";
+import { useCallback } from "react";
 import { AnyArtTag } from "../../helpers/ArtGallery.types";
 
 export interface GalleryOptionFieldProps {
@@ -12,10 +13,10 @@ const GalleryOptionField = ({
   checked,
   onClick,
 }: GalleryOptionFieldProps) => {
-  const onClickInner = () => {
+  const onClickInner = useCallback(() => {
     checked = !checked;
     onClick(tag, checked);
-  };
+  }, [checked, onClick, tag]);
 
   return (
     <button onClick={onClickInner} className="flex items-center gap-2">

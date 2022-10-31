@@ -99,6 +99,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
         >
           <MaybeImage
             src={pageInfo?.image}
+            alt="Banner Image"
             className="w-full h-[100vh] mx-auto object-cover"
             imageRef={ref}
           />

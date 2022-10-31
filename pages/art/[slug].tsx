@@ -13,7 +13,7 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import { popUp } from "../../helpers/PopUp";
 import withError from "../../helpers/withError";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Carousel, { getNext, getPrev } from "../../components/Carousel";
 import AltImage from "../../components/AltImage";
 import useElementSize from "../../helpers/hooks/UseElementSize";
@@ -32,11 +32,14 @@ const Art = ({ data, variables, query }: ServerSideProps) => {
   const [currentImg, setCurrentImg] = useState<number | undefined>(undefined);
   const [allImages, setAllImages] = useState<string[]>([]);
 
-  const shiftCarousel = (right: boolean) => {
-    if (currentImg == undefined) return;
-    if (right) setCurrentImg(getNext(currentImg, allImages.length));
-    else setCurrentImg(getPrev(currentImg, allImages.length));
-  };
+  const shiftCarousel = useCallback(
+    (right: boolean) => {
+      if (currentImg == undefined) return;
+      if (right) setCurrentImg(getNext(currentImg, allImages.length));
+      else setCurrentImg(getPrev(currentImg, allImages.length));
+    },
+    [setCurrentImg, currentImg, allImages]
+  );
 
   useEffect(() => {
     if (!art) return;
