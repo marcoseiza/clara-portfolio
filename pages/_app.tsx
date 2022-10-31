@@ -29,7 +29,7 @@ const App = ({ Component, pageProps, router }: AppProps) => {
     useLoading.subscribe((s) => {
       setShowLoading(s.isLoading);
     });
-  }, [router.route]);
+  }, [router.route, showLoading]);
 
   const content = () => (
     <motion.div
