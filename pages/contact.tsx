@@ -15,6 +15,7 @@ import { popUp } from "../helpers/PopUp";
 import client from "../.tina/__generated__/client";
 import { motion } from "framer-motion";
 import { EnvelopeSimple } from "phosphor-react";
+import TinaPage from "../components/TinaPage";
 
 interface ServerSideProps {
   data: PageQuery;
@@ -34,27 +35,12 @@ const Contact: NextPage<PropsWithPage<ServerSideProps>> = ({
   if (!contact) return <></>;
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))] min-h-[calc(100vh-var(--headerHeight)-1.5em)]">
-      <motion.div className="relative h-full w-full" {...popUp()}>
-        <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50 uppercase">
-          {contact.title}
-        </h1>
-        <img
-          src={contact.image}
-          alt="Profile picture"
-          className="h-full w-full min-w-[90px] object-cover object-right opacity-60"
-        />
-      </motion.div>
-      <div className="w-full flex flex-col p-10">
+    <TinaPage {...contact}>
+      <>
         <motion.div
-          className="w-full mb-10 flex items-start justify-self-center"
-          {...popUp(0.2)}
+          className="flex gap-3 items-center mb-10 max-md:mb-3"
+          {...popUp(0.3)}
         >
-          <MaybeBody className="prose-h1:font-normal">
-            <TinaMarkdown content={contact.body} />
-          </MaybeBody>
-        </motion.div>
-        <motion.div className="flex gap-3 items-center mb-10" {...popUp(0.3)}>
           <EnvelopeSimple size={32} weight="bold" />
           <a
             href="mailto:claraeizayaga@gmail.com"
@@ -64,13 +50,13 @@ const Contact: NextPage<PropsWithPage<ServerSideProps>> = ({
           </a>
         </motion.div>
         <motion.div
-          className="w-full flex items-start justify-center"
+          className="w-full flex items-start justify-center mb-5"
           {...popUp(0.4)}
         >
           <ContactForm />
         </motion.div>
-      </div>
-    </div>
+      </>
+    </TinaPage>
   );
 };
 

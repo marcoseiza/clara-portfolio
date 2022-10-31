@@ -1,7 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 import { ErrorProps, makeError } from "../helpers";
 import { PropsWithPage } from "./_app";
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import Instagram from "../components/Instagram";
 import { popUp } from "../helpers/PopUp";
 import {
@@ -15,6 +15,7 @@ import { useTina } from "tinacms/dist/edit-state";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MaybeBody from "../components/MaybeBody";
 import MaybeImage from "../components/MaybeImage";
+import TinaPage from "../components/TinaPage";
 
 interface ServerSideProps {
   data: PageQuery;
@@ -37,29 +38,14 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
   if (altImages.length > 4) altImages = altImages.slice(0, 4);
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))] min-h-[calc(100vh-var(--headerHeight)-1.5em)]">
-      <motion.div className="relative h-full w-full" {...popUp()}>
-        <h1 className="absolute top-2 right-0 text-8xl font-bold vertical-text opacity-50 uppercase">
-          {about.title}
-        </h1>
-        <img
-          src={about.image}
-          alt="Profile picture"
-          className="h-full w-full min-w-[90px] object-cover object-right opacity-60"
-        />
-      </motion.div>
-      <div className="relative h-full w-full flex flex-col items-center p-10 pb-0 justify-between">
-        <motion.div {...popUp(0.2)}>
-          <MaybeBody className="prose-h1:font-normal">
-            <TinaMarkdown content={about.body} />
-          </MaybeBody>
+    <TinaPage {...about}>
+      <div className="flex flex-col gap-2 items-center pb-5 w-full">
+        <motion.div {...popUp(0.3)}>
+          <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />
         </motion.div>
-        <div className="flex flex-col gap-2 items-center">
-          <motion.div {...popUp(0.3)}>
-            <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />
-          </motion.div>
+        <LayoutGroup>
           {about.altImages && (
-            <div className="grid grid-cols-2 w-full gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4 align-center">
               {altImages.map((v, ii) => {
                 return (
                   <motion.div key={ii} {...popUp(ii * 0.1 + 0.3)}>
@@ -69,9 +55,9 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
               })}
             </div>
           )}
-        </div>
+        </LayoutGroup>
       </div>
-    </div>
+    </TinaPage>
   );
 };
 

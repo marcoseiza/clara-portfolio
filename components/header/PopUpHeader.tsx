@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { X } from "phosphor-react";
 import NavLink from "./NavLink";
@@ -13,7 +12,7 @@ const PopUpHeader = ({ togglePopUpNav, pages }: PopUpHeaderProps) => {
   const { route } = useRouter();
   return (
     <motion.div
-      className="fixed top-0 bottom-0 inset-x-0 overflow-hidden bg-black/70 flex flex-col gap-5 px-8 pt-4 pb-9 z-50 scroll-contain scroll-contain"
+      className="fixed top-0 bottom-0 inset-x-0 overflow-hidden bg-black/80 flex flex-col gap-5 px-8 pt-4 pb-9 z-50 scroll-contain scroll-contain"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
