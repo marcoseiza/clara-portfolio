@@ -102,6 +102,12 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
             alt="Banner Image"
             className="w-full h-[100vh] mx-auto object-cover"
             imageRef={ref}
+            onLoad={() => {
+              console.log("banner");
+            }}
+            onLoadStart={() => {
+              console.log("start");
+            }}
           />
         </MouseHoverScaleAnimation>
         <AnimatePresence>

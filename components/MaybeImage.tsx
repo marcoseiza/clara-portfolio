@@ -10,12 +10,7 @@ const MaybeImage = ({ src, imageRef, ...props }: MaybeImageProps) => {
   if (!src) return <></>;
   return (
     <div>
-      <img
-        ref={imageRef}
-        src={src}
-        {...props}
-        onLoad={() => console.log("load")}
-      />
+      <img ref={imageRef} src={src} {...props} />
     </div>
   );
 };
