@@ -1,16 +1,50 @@
 import Link from "next/link";
+import { List } from "phosphor-react";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import PopUpHeader from "./PopUpHeader";
+import { useHeaderPopUp } from "../../store";
 
 const NavHeader = () => {
+  const { show, toggle } = useHeaderPopUp();
+
+  const pages = [
+    { label: "GALLERY", link: "/#gallery" },
+    { label: "ABOUT", link: "/about" },
+    { label: "CONTACT", link: "/contact" },
+  ];
+
+  const popUpNavPages = [{ label: "HOME", link: "/" }, ...pages];
+
   return (
     <>
-      <h1 className="text-2xl font-bold">
-        <Link href="/">CLARA EIZAYAGA</Link>
-      </h1>
-      <nav className="flex items-center gap-4">
-        <Link href="/#gallery">GALLERY</Link>
-        <Link href="/about">ABOUT</Link>
-        <Link href="/contact">CONTACT</Link>
-      </nav>
+      <div
+        className={`w-full flex items-center justify-between ${
+          show && "opacity-0"
+        }`}
+      >
+        <h1 className="text-2xl font-bold">
+          <Link href="/">CLARA EIZAYAGA</Link>
+        </h1>
+        <nav className="hidden md:block md:py-2">
+          <ul className="md:flex items-center gap-4">
+            {pages.map(({ label, link }, ii) => (
+              <li key={ii} className="inline">
+                <Link href={link}>{label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div
+          className="md:hidden cursor-pointer hover:bg-neutral-600/20 rounded-md p-1 transition-colors"
+          onClick={toggle}
+        >
+          <List size={32} />
+        </div>
+      </div>
+      <AnimatePresence>
+        {show && <PopUpHeader togglePopUpNav={toggle} pages={popUpNavPages} />}
+      </AnimatePresence>
     </>
   );
 };

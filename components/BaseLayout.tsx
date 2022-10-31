@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { useHeaderHeight } from "../store";
 import Header from "./header/Header";
 
@@ -13,17 +13,14 @@ const BaseLayout = ({
   children,
 }: PropsWithChildren<BaseLayoutProps>) => {
   const headerHeight = useHeaderHeight((s) => s.height);
+  const containerCSS = container
+    ? "md:container px-5 mx-auto pt-[var(--headerHeight)]"
+    : "";
+  const contentStyle = { [`--headerHeight` as any]: `${headerHeight}px` };
   return (
     <>
       <Header isGallery={isGallery} translucent={!container} />
-      <div
-        className={`relative ${
-          container ? "md:container px-5 mx-auto pt-[var(--headerHeight)]" : ""
-        }`}
-        style={{
-          [`--headerHeight` as any]: `${headerHeight}px`,
-        }}
-      >
+      <div className={`relative ${containerCSS}`} style={contentStyle}>
         {children}
       </div>
     </>

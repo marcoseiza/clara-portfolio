@@ -1,4 +1,4 @@
-import { FunnelSimple } from "phosphor-react";
+import { Sliders } from "phosphor-react";
 import { useState } from "react";
 import { useHeaderHeight, useTags } from "../../store";
 import GalleryOptions from "./GalleryOptions";
@@ -31,8 +31,11 @@ const GalleryHeader = () => {
             <Tag key={i} tag={t} onRemove={removeTag} />
           ))}
         </div>
-        <button onClick={onFilterClick}>
-          <FunnelSimple size={32} weight="bold" />
+        <button
+          onClick={onFilterClick}
+          className="cursor-pointer hover:bg-neutral-600/20 rounded-md p-1 transition-colors"
+        >
+          <Sliders size={32} />
         </button>
       </div>
       <AnimatePresence>

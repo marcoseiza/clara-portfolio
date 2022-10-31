@@ -26,3 +26,16 @@ interface UseHeaderHeight {
   height: number;
 }
 export const useHeaderHeight = create<UseHeaderHeight>(() => ({ height: 0 }));
+
+interface UseHeaderPopUp {
+  show: boolean;
+  toggle: () => void;
+}
+export const useHeaderPopUp = create<UseHeaderPopUp>((set) => ({
+  show: false,
+  toggle: () =>
+    set((state) => {
+      document.body.style.overflow = !state.show ? "hidden" : "";
+      return { show: !state.show };
+    }),
+}));
