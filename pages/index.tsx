@@ -20,7 +20,7 @@ import {
   parseSeriesDisplayInstructions,
 } from "../helpers/ArtGalleryHelpers";
 import { useTouchTop } from "../helpers/hooks/UseScroll";
-import { useTags } from "../store";
+import { useLoading, useTags } from "../store";
 import MaybeImage from "../components/MaybeImage";
 import useElementSize from "../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../components/MouseHoverScaleAnimation";
@@ -35,6 +35,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useSetTimeout } from "../helpers/hooks/UseSetTimeout";
+import BackToTop from "../components/BackToTop";
 
 interface ServerSideProps {
   series: ArtSeries[];
@@ -88,6 +89,8 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
     () => scrollYProgress.get() != 0 && setShowScroll(false)
   );
 
+  const stopLoading = useLoading((s) => s.stopLoading);
+
   return (
     <>
       <motion.div style={{ scale: imageScale }} className="relative">
@@ -107,11 +110,9 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               className="next-image w-full mx-auto !object-cover"
               layout="fill"
               quality={100}
-              onLoad={() => {
-                console.log("banner");
-              }}
-              onLoadStart={() => {
-                console.log("start");
+              onLoadingComplete={() => {
+                console.log("done");
+                stopLoading();
               }}
             />
           </div>
@@ -151,27 +152,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
           )}
         </div>
       </div>
-      <AnimatePresence>
-        {touched && (
-          <Link href="/">
-            <motion.div
-              className="fixed bottom-10 right-10 py-2 px-4 bg-black rounded-full flex items-center gap-1 cursor-pointer"
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 80, opacity: 0 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <CaretUp
-                size={24}
-                weight="bold"
-                {...{ className: "text-white" }}
-              />
-              <span className="uppercase text-white font-bold">top</span>
-            </motion.div>
-          </Link>
-        )}
-      </AnimatePresence>
+      <AnimatePresence>{touched && <BackToTop />}</AnimatePresence>
     </>
   );
 };
@@ -193,5 +174,6 @@ export const getStaticProps: GetStaticProps<
 
 const HomeWithError = withError(Home);
 (HomeWithError as any).noContainer = true;
+(HomeWithError as any).showLoading = true;
 
 export default HomeWithError;

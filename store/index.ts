@@ -39,3 +39,12 @@ export const useHeaderPopUp = create<UseHeaderPopUp>((set) => ({
       return { show: !state.show };
     }),
 }));
+
+interface UseLoading {
+  isLoading: boolean;
+  stopLoading: () => void;
+}
+export const useLoading = create<UseLoading>((set) => ({
+  isLoading: false,
+  stopLoading: () => set(() => ({ isLoading: false })),
+}));

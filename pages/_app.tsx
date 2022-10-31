@@ -4,7 +4,9 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BaseLayout from "../components/BaseLayout";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLoading } from "../store";
+import LoadingPage from "../components/LoadingPage";
 
 export interface PageProps {
   setIsGallery: Dispatch<SetStateAction<boolean>>;
@@ -17,9 +19,16 @@ const App = ({ Component, pageProps, router }: AppProps) => {
 
   const noBaseLayout = !!(Component as any).noBaseLayout;
   const noContainer = !!(Component as any).noContainer;
+  const [showLoading, setShowLoading] = useState<boolean>(
+    ((Component as any).showLoading as boolean | undefined) || false
+  );
 
   useEffect(() => {
     setIsGallery(false);
+    useLoading.setState({ isLoading: showLoading });
+    useLoading.subscribe((s) => {
+      setShowLoading(s.isLoading);
+    });
   }, [router.route]);
 
   const content = () => (
@@ -38,13 +47,16 @@ const App = ({ Component, pageProps, router }: AppProps) => {
 
   return (
     <Tina>
-      {!noBaseLayout ? (
-        <BaseLayout isGallery={isGallery} container={!noContainer}>
-          {content()}
-        </BaseLayout>
-      ) : (
-        content()
-      )}
+      <AnimatePresence>{showLoading && <LoadingPage />}</AnimatePresence>
+      <div style={{ opacity: showLoading ? 100 : 100 }}>
+        {!noBaseLayout ? (
+          <BaseLayout isGallery={isGallery} container={!noContainer}>
+            {content()}
+          </BaseLayout>
+        ) : (
+          content()
+        )}
+      </div>
     </Tina>
   );
 };
