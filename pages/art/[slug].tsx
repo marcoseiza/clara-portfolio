@@ -8,7 +8,7 @@ import {
 import MaybeImage from "../../components/MaybeImage";
 import MaybeBody from "../../components/MaybeBody";
 import { maxCSS, ErrorProps, makeError } from "../../helpers";
-import { GetServerSideProps } from "next/types";
+import { GetStaticProps, GetStaticPaths } from "next/types";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import { popUp } from "../../helpers/PopUp";
@@ -19,13 +19,13 @@ import AltImage from "../../components/AltImage";
 import useElementSize from "../../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../../components/MouseHoverScaleAnimation";
 
-interface ServerSideProps {
+interface StaticProps {
   data: ArtQuery;
   variables: ArtQueryVariables;
   query: string;
 }
 
-const Art = ({ data, variables, query }: ServerSideProps) => {
+const Art = ({ data, variables, query }: StaticProps) => {
   const page = useTina({ query, variables, data });
   const art = page.data?.art as ArtInfo;
 
@@ -132,10 +132,14 @@ const Art = ({ data, variables, query }: ServerSideProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
-  ServerSideProps | ErrorProps
-> = async (context) => {
-  const slug = context.params?.slug as unknown as string;
+type StaticUrlParameters = { slug: string };
+type StaticContext = { params: StaticUrlParameters };
+
+export const getStaticProps: GetStaticProps<
+  StaticProps | ErrorProps,
+  StaticUrlParameters
+> = async ({ params }) => {
+  const slug = params?.slug || "";
 
   try {
     var page = await client.queries.art({ relativePath: `${slug}.mdx` });
@@ -144,6 +148,19 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   return { props: page };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const connection = await client.queries.artConnection();
+  const edges = connection.data.artConnection.edges;
+  const paths =
+    edges
+      ?.map((v) => {
+        if (!v?.node) return;
+        return { params: { slug: v.node._sys.filename } };
+      })
+      .filter((v): v is StaticContext => v !== undefined) || [];
+  return { paths, fallback: false };
 };
 
 export default withError(Art);
