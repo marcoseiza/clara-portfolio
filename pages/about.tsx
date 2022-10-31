@@ -48,8 +48,16 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4 align-center">
               {altImages.map((v, ii) => {
                 return (
-                  <motion.div key={ii} {...popUp(ii * 0.1 + 0.3)}>
-                    <MaybeImage src={v?.src} alt="Alternative About Pictures" />
+                  <motion.div
+                    key={ii}
+                    {...popUp(ii * 0.1 + 0.3)}
+                    className="next-image-container"
+                  >
+                    <MaybeImage
+                      src={v?.src}
+                      alt="Alternative About Pictures"
+                      layout="fill"
+                    />
                   </motion.div>
                 );
               })}
@@ -67,10 +75,14 @@ export const getStaticProps: GetStaticProps<
   try {
     var page = await client.queries.page({ relativePath: `about.mdx` });
   } catch (e) {
-    return { props: makeError(400, "Art Piece Not Found.") };
+    console.log(e);
+    return { props: makeError(400, "Error parsing content.") };
   }
 
   return { props: page };
 };
 
-export default withError(About);
+const AboutWithError = withError(About);
+(AboutWithError as any).noContainer = true;
+
+export default AboutWithError;

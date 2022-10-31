@@ -20,3 +20,20 @@
 .scroll-contain {
   overscroll-behavior: none;
 }
+
+.next-image-container,
+.next-image-container-height {
+  @apply w-full;
+}
+
+.next-image-container > span {
+  position: unset !important;
+}
+
+.next-image-container-height > span {
+  @apply h-full;
+}
+
+.next-image {
+  @apply !relative !w-full !h-[unset] object-contain;
+}

@@ -5,11 +5,13 @@ import Header from "./header/Header";
 export interface BaseLayoutProps {
   isGallery?: boolean;
   container?: boolean;
+  translucent?: boolean;
 }
 
 const BaseLayout = ({
   isGallery = false,
   container = true,
+  translucent = !container,
   children,
 }: PropsWithChildren<BaseLayoutProps>) => {
   const headerHeight = useHeaderHeight((s) => s.height);
@@ -19,7 +21,7 @@ const BaseLayout = ({
   const contentStyle = { [`--headerHeight` as any]: `${headerHeight}px` };
   return (
     <>
-      <Header isGallery={isGallery} translucent={!container} />
+      <Header isGallery={isGallery} translucent={translucent} />
       <div className={`relative ${containerCSS}`} style={contentStyle}>
         {children}
       </div>

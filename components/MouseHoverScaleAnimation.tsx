@@ -24,6 +24,12 @@ export interface MouseHoverScaleAnimationProps {
   onClick?: boolean;
 }
 
+const transition: AnimationOptions<number> = {
+  type: "spring",
+  stiffness: 70,
+  damping: 20,
+};
+
 const MouseHoverScaleAnimation = ({
   children,
   size: { width, height },
@@ -47,28 +53,22 @@ const MouseHoverScaleAnimation = ({
   const translateX = useTransform(x, [0, width], clamp);
   const translateY = useTransform(y, [0, height], clamp);
 
-  const transition: AnimationOptions<number> = {
-    type: "spring",
-    stiffness: 70,
-    damping: 20,
-  };
-
   const reset = useCallback(() => {
     animate(x, width / 2, transition);
     animate(y, height / 2, transition);
     setAnimationToggled(!onClick);
-  }, [x, y, width, height]);
+  }, [x, y, width, height, onClick]);
 
   const toggleAnimation = useCallback(() => {
     if (animationToggled) reset();
     else setAnimationToggled(!animationToggled);
-  }, [setAnimationToggled, animationToggled]);
+  }, [setAnimationToggled, animationToggled, reset]);
 
   useEffect(() => {
     if (width == 0 || height == 0) return;
     x.set(width / 2);
     y.set(height / 2);
-  }, [width, height, reset]);
+  }, [width, height, reset, x, y]);
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -77,7 +77,7 @@ const MouseHoverScaleAnimation = ({
       animate(x, e.pageX - left, transition);
       animate(y, e.pageY - top - window.scrollY, transition);
     },
-    [animate, animationToggled, transition]
+    [animationToggled, x, y]
   );
 
   const handleMouseLeave = useCallback(() => reset(), [reset]);

@@ -50,7 +50,7 @@ const Art = ({ data, variables, query }: StaticProps) => {
     setAllImages(images);
   }, [art]);
 
-  const [ref, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize<HTMLDivElement>();
 
   if (!art) return <></>;
   return (
@@ -66,12 +66,14 @@ const Art = ({ data, variables, query }: StaticProps) => {
             className="cursor-zoom-in"
           >
             <MouseHoverScaleAnimation size={size} scale={1.03} translate={0.01}>
-              <MaybeImage
-                src={art.src}
-                alt="Banner Image"
-                className="w-[var(--imgWidth)]"
-                imageRef={ref}
-              />
+              <div ref={ref} className="next-image-container">
+                <MaybeImage
+                  src={art.src}
+                  alt="Banner Image"
+                  className="next-image w-[var(--imgWidth)]"
+                  layout="fill"
+                />
+              </div>
             </MouseHoverScaleAnimation>
           </motion.div>
           <div>
@@ -110,7 +112,7 @@ const Art = ({ data, variables, query }: StaticProps) => {
                   onClick={() => setCurrentImg(ii + 1)}
                   className="cursor-zoom-in w-fit"
                 >
-                  <AltImage src={img?.src} className="w-[var(--imgWidth)]" />
+                  <AltImage src={img?.src} className="!w-[var(--imgWidth)]" />
                 </motion.div>
               );
             })}

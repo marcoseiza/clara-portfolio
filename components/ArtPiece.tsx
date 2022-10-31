@@ -3,13 +3,14 @@ import { ArtInfo } from "../helpers/ArtGallery.types";
 import useElementSize from "../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "./MouseHoverScaleAnimation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export interface ArtPieceProps {
   info: ArtInfo;
 }
 
 const ArtPiece = ({ info }: ArtPieceProps) => {
-  const [ref, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize<HTMLDivElement>();
 
   return (
     <motion.div className="relative overflow-hidden" whileHover="hover">
@@ -20,13 +21,15 @@ const ArtPiece = ({ info }: ArtPieceProps) => {
         className="w-full h-fit"
       >
         <Link href={`/art/${info.slug}`}>
-          <img
-            ref={ref}
-            src={info.src}
-            alt="Art Piece"
-            className="object-cover max-w-full h-auto cursor-pointer"
-            draggable="false"
-          />
+          <div ref={ref} className="relative h-fit next-image-container">
+            <Image
+              src={info.src}
+              alt="Art Piece"
+              layout="fill"
+              className="next-image cursor-pointer"
+              draggable="false"
+            />
+          </div>
         </Link>
       </MouseHoverScaleAnimation>
       <motion.div

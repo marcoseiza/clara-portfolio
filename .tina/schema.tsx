@@ -9,8 +9,10 @@ const branch =
 const schema = defineSchema({
   // See https://tina.io/docs/tina-cloud/connecting-site/ for more information about this config
   config: {
-    token: process.env.TINA_READ_ONLY_TOKEN, // generated on app.tina.io,
-    clientId: process.env.TINA_CLIENT_ID, // generated on app.tina.io
+    // token: process.env.TINA_READ_ONLY_TOKEN, // generated on app.tina.io,
+    // clientId: process.env.TINA_CLIENT_ID, // generated on app.tina.io
+    token: undefined,
+    clientId: undefined,
     branch,
     media: {
       tina: {
@@ -79,11 +81,28 @@ const schema = defineSchema({
           if (document._sys.filename == "contact") return "/contact";
         },
       },
+      defaultItem: () => ({
+        opacity: 60,
+      }),
       fields: [
         {
           type: "image",
           label: "Hero Image",
           name: "image",
+          required: true,
+        },
+        {
+          type: "number",
+          label: "Image Opacity",
+          name: "opacity",
+          ui: {
+            step: 1,
+            validate: (val) => {
+              if (val < 0 || val > 100) {
+                return "The number must be between 0 and 100!!";
+              }
+            },
+          },
           required: true,
         },
         {

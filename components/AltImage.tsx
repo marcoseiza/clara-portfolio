@@ -8,7 +8,7 @@ export interface AltImageProps {
 }
 
 const AltImage = ({ src, className }: AltImageProps) => {
-  const [ref, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize();
   return (
     <MouseHoverScaleAnimation
       size={size}
@@ -16,12 +16,9 @@ const AltImage = ({ src, className }: AltImageProps) => {
       scale={1.02}
       translate={0.01}
     >
-      <MaybeImage
-        src={src}
-        alt="Alternative Image"
-        className={className}
-        imageRef={ref}
-      />
+      <div ref={ref} className={"next-image-container " + className}>
+        <MaybeImage src={src} alt="Alternative Image" layout="fill" />
+      </div>
     </MouseHoverScaleAnimation>
   );
 };

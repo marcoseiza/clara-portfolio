@@ -62,7 +62,9 @@ const ImgPreview = ({ onClick, src, position }: ImgPreviewProps) => {
       }}
       onClick={handleCarousel(onClick)}
     >
-      <img src={src} className="h-full" />
+      {/* eslint-disable @next/next/no-img-element*/}
+      <img src={src} alt="Carousel Image" className="h-full" />
+      {/* eslint-enable @next/next/no-img-element*/}
     </li>
   );
 };
@@ -104,11 +106,14 @@ const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
             className="max-h-full"
             onClick
           >
+            {/* eslint-disable @next/next/no-img-element*/}
             <img
               src={all[current]}
+              alt="Carousel Image"
               ref={ref}
               className="block max-h-[70vh] w-auto"
             />
+            {/* eslint-enable @next/next/no-img-element*/}
           </MouseHoverScaleAnimation>
         </li>
         {(all.length > 2 || current == 0) && (

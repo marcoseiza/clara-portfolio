@@ -71,7 +71,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   const [scrollAnchor, touched] = useTouchTop(true);
   useEffect(() => setIsGallery(touched), [touched, setIsGallery]);
 
-  const [ref, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize<HTMLDivElement>();
 
   const { scrollYProgress } = useScroll();
 
@@ -97,18 +97,24 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
           translate={0.01}
           noScaleOnHover
         >
-          <MaybeImage
-            src={pageInfo?.image}
-            alt="Banner Image"
-            className="w-full h-[100vh] mx-auto object-cover"
-            imageRef={ref}
-            onLoad={() => {
-              console.log("banner");
-            }}
-            onLoadStart={() => {
-              console.log("start");
-            }}
-          />
+          <div
+            ref={ref}
+            className="relative h-[100vh] next-image-container-height"
+          >
+            <MaybeImage
+              src={pageInfo?.image}
+              alt="Banner Image"
+              className="next-image w-full mx-auto !object-cover"
+              layout="fill"
+              quality={100}
+              onLoad={() => {
+                console.log("banner");
+              }}
+              onLoadStart={() => {
+                console.log("start");
+              }}
+            />
+          </div>
         </MouseHoverScaleAnimation>
         <AnimatePresence>
           {showScroll && (

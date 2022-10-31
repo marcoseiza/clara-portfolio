@@ -14,8 +14,7 @@ const GalleryOptionField = ({
   onClick,
 }: GalleryOptionFieldProps) => {
   const onClickInner = useCallback(() => {
-    checked = !checked;
-    onClick(tag, checked);
+    onClick(tag, !checked);
   }, [checked, onClick, tag]);
 
   return (

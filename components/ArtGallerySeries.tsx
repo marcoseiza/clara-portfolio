@@ -22,11 +22,11 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
 
   const handleSize = useCallback(() => {
     setTitleTop((titleRef?.offsetTop || 0) < (masonryRef?.offsetTop || 0));
-  }, [titleRef, masonryRef, titleRef?.offsetTop, masonryRef?.offsetTop]);
+  }, [titleRef, masonryRef]);
 
   useEventListener("resize", handleSize);
 
-  useEffect(() => handleSize(), [titleRef, masonryRef]);
+  useEffect(() => handleSize(), [titleRef, masonryRef, handleSize]);
 
   const seriesOffsetDelay = series.art.length * order * 0.05;
 

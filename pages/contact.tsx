@@ -72,4 +72,6 @@ export const getStaticProps: GetStaticProps<
   return { props: page };
 };
 
-export default withError(Contact);
+const ContactWithError = withError(Contact);
+(ContactWithError as any).noContainer = true;
+export default ContactWithError;
