@@ -26,14 +26,36 @@
   @apply w-full;
 }
 
+.next-image-container-brute {
+  @apply w-fit;
+}
+
 .next-image-container > span {
   position: unset !important;
 }
 
 .next-image-container-height > span {
-  @apply h-full;
+  @apply !h-full !relative;
+}
+
+.next-image-container-brute > span {
+  position: unset !important;
+  overflow: unset !important;
+  width: unset !important;
+  height: unset !important;
+  background: unset !important;
+  opacity: unset !important;
+  border: unset !important;
+  margin: unset !important;
+  padding: unset !important;
+  position: unset !important;
+  inset: unset !important;
 }
 
 .next-image {
   @apply !relative !w-full !h-[unset] object-contain;
+}
+
+.next-image-brute {
+  @apply !relative !w-[unset] !h-[unset] !min-w-[unset] !max-w-[unset] !min-h-[unset] !max-h-[unset];
 }

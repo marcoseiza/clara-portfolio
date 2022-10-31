@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { CaretLeft, CaretRight } from "phosphor-react";
 import MouseHoverScaleAnimation from "./MouseHoverScaleAnimation";
 import useElementSize from "../helpers/hooks/UseElementSize";
+import Image from "next/image";
 
 export interface CarouselProps {
   current: number;
@@ -62,15 +63,20 @@ const ImgPreview = ({ onClick, src, position }: ImgPreviewProps) => {
       }}
       onClick={handleCarousel(onClick)}
     >
-      {/* eslint-disable @next/next/no-img-element*/}
-      <img src={src} alt="Carousel Image" className="h-full" />
-      {/* eslint-enable @next/next/no-img-element*/}
+      <div className="next-image-container-height h-full">
+        <Image
+          src={src}
+          alt="Carousel Image"
+          className="!h-full block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
+          layout="fill"
+        />
+      </div>
     </li>
   );
 };
 
 const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
-  const [ref, size] = useElementSize<HTMLImageElement>();
+  const [ref, size] = useElementSize();
 
   return (
     <motion.div
@@ -106,14 +112,14 @@ const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
             className="max-h-full"
             onClick
           >
-            {/* eslint-disable @next/next/no-img-element*/}
-            <img
-              src={all[current]}
-              alt="Carousel Image"
-              ref={ref}
-              className="block max-h-[70vh] w-auto"
-            />
-            {/* eslint-enable @next/next/no-img-element*/}
+            <div className="next-image-container-brute" ref={ref}>
+              <Image
+                src={all[current]}
+                alt="Carousel Image"
+                layout="fill"
+                className="!h-[70vh] block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
+              />
+            </div>
           </MouseHoverScaleAnimation>
         </li>
         {(all.length > 2 || current == 0) && (
