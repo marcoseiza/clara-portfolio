@@ -118,11 +118,11 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
           )}
         </AnimatePresence>
       </motion.div>
-      <div className="md:container px-5 mx-auto pt-[var(--headerHeight)]">
+      <div className="md:container px-5 mx-auto">
         <div
           ref={scrollAnchor}
           id="gallery"
-          className={`pt-4 pb-20 min-h-screen ${
+          className={`pt-[var(--headerHeight)] pb-20 min-h-screen ${
             noArt && "flex items-center justify-center"
           }`}
         >
