@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { X } from "phosphor-react";
+import NavLink from "./NavLink";
 
 export interface PopUpHeaderProps {
   togglePopUpNav: () => void;
@@ -41,26 +42,13 @@ const PopUpHeader = ({ togglePopUpNav, pages }: PopUpHeaderProps) => {
               exit={{ opacity: 0 }}
               onClick={togglePopUpNav}
             >
-              <Link href={link}>
-                <motion.span
-                  className="inline-block text-white text-2xl cursor-pointer"
-                  whileHover="hover"
-                  animate={route == link ? "hover" : ""}
-                >
-                  {label}
-                  <motion.div
-                    className="w-full h-0.5 bg-white"
-                    initial={{ width: 0 }}
-                    variants={{
-                      hover: { width: "100%" },
-                    }}
-                    transition={{
-                      ease: "easeInOut",
-                      duration: 0.15,
-                    }}
-                  />
-                </motion.span>
-              </Link>
+              <NavLink
+                current={route == link}
+                label={label}
+                link={link}
+                size="2xl"
+                color="white"
+              />
             </motion.li>
           ))}
         </ul>

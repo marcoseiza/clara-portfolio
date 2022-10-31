@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { ArtSeries } from "../helpers/ArtGallery.types";
 import useEventListener from "../helpers/hooks/UseEventListener";
@@ -22,9 +22,11 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
 
   const handleSize = useCallback(() => {
     setTitleTop((titleRef?.offsetTop || 0) < (masonryRef?.offsetTop || 0));
-  }, [titleRef?.offsetTop, masonryRef?.offsetTop]);
+  }, [titleRef, masonryRef, titleRef?.offsetTop, masonryRef?.offsetTop]);
 
   useEventListener("resize", handleSize);
+
+  useEffect(() => handleSize(), [titleRef, masonryRef]);
 
   const seriesOffsetDelay = series.art.length * order * 0.05;
 
@@ -45,7 +47,7 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
       </div>
       <div className="grow" ref={setMasonryRef}>
         <Masonry
-          breakpointCols={{ default: 3, 800: 2, 600: 1 }}
+          breakpointCols={{ default: 3, 1024: 2, 768: 1 }}
           className="flex w-auto gap-5"
           columnClassName="flex flex-col bg-clip-padding gap-5 w-full"
         >

@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import { useHeaderHeight } from "../store";
 import Header from "./header/Header";
 

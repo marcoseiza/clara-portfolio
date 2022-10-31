@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { List } from "phosphor-react";
-import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import PopUpHeader from "./PopUpHeader";
 import { useHeaderPopUp } from "../../store";
+import NavLink from "./NavLink";
+import { useRouter } from "next/router";
 
 const NavHeader = () => {
   const { show, toggle } = useHeaderPopUp();
+  const { route } = useRouter();
 
   const pages = [
     { label: "GALLERY", link: "/#gallery" },
@@ -30,7 +32,7 @@ const NavHeader = () => {
           <ul className="md:flex items-center gap-4">
             {pages.map(({ label, link }, ii) => (
               <li key={ii} className="inline">
-                <Link href={link}>{label}</Link>
+                <NavLink current={route == link} link={link} label={label} />
               </li>
             ))}
           </ul>

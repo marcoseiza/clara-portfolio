@@ -35,7 +35,6 @@ import {
   useTransform,
 } from "framer-motion";
 import { useSetTimeout } from "../helpers/hooks/UseSetTimeout";
-import { popUp } from "../helpers/PopUp";
 
 interface ServerSideProps {
   series: ArtSeries[];
@@ -143,7 +142,6 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
               <CaretUp
                 size={24}
