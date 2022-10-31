@@ -17,14 +17,14 @@ const ArtPiece = ({ info }: ArtPieceProps) => {
         size={size}
         scale={1.03}
         translate={0.02}
-        className="w-full h-full"
+        className="w-full h-fit"
       >
         <Link href={`/art/${info.slug}`}>
           <img
             ref={ref}
             src={info.src}
             alt="Art Piece"
-            className="object-cover h-full cursor-pointer"
+            className="object-cover max-w-full h-auto cursor-pointer"
             draggable="false"
           />
         </Link>

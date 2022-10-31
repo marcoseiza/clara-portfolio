@@ -36,7 +36,7 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
         {series.name && (
           <motion.h2
             className={`${
-              !titleTop && "vertical-text"
+              !titleTop && "vertical-text w-10"
             } sticky top-[calc(var(--header-height)+0.5em)] text-4xl font-bold uppercase mb-5`}
             style={{ ["--header-height" as any]: `${headerHeight}px` }}
             {...popUp(seriesOffsetDelay)}
