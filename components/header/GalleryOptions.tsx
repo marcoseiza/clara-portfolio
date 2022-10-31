@@ -2,6 +2,7 @@ import { AnyArtTag, ArtTagType } from "../../helpers/ArtGallery.types";
 import { useTags } from "../../store";
 import GalleryOptionField from "./GalleryOptionField";
 import { motion } from "framer-motion";
+import { useCallback } from "react";
 
 export interface GalleryOptionsProps {
   headerHeight: number;
