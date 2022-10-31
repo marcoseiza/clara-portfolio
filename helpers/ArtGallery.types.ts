@@ -9,6 +9,7 @@ export interface ArtInfo {
   src: string;
   tags: ArtTag<ArtTagType.PIECE>[];
   slug: string;
+  title: string;
 }
 
 export enum ArtTagType {

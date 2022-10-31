@@ -91,7 +91,12 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   return (
     <>
       <motion.div style={{ scale: imageScale }} className="relative">
-        <MouseHoverScaleAnimation size={size} translate={0.002} noScaleOnHover>
+        <MouseHoverScaleAnimation
+          size={size}
+          scale={1.03}
+          translate={0.01}
+          noScaleOnHover
+        >
           <MaybeImage
             src={pageInfo?.image}
             className="w-full h-[100vh] mx-auto object-cover"
@@ -142,6 +147,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
             >
               <CaretUp
                 size={24}

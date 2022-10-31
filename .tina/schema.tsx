@@ -115,6 +115,7 @@ const schema = defineSchema({
               type: "image",
               label: "Image",
               name: "src",
+              required: true,
             },
           ],
         },

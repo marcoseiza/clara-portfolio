@@ -30,7 +30,12 @@ export const fillSeriesWithArt = async (series: ArtSeries[]) => {
   edges?.forEach((a) => {
     if (a?.node == undefined) return;
     const tags = [a.node.sold ? SOLD : AVAILABLE];
-    const info: ArtInfo = { src: a.node.src, tags, slug: a.node._sys.filename };
+    const info: ArtInfo = {
+      src: a.node.src,
+      tags,
+      slug: a.node._sys.filename,
+      title: a.node.title,
+    };
     const ii = series.findIndex((s) => s.id == a.node?.series.id);
     if (ii == -1) return;
     series[ii].art.push(info);
