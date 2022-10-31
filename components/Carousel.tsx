@@ -117,7 +117,7 @@ const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
                 src={all[current]}
                 alt="Carousel Image"
                 layout="fill"
-                className="!h-[70vh] block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
+                className="!h-[80vh] block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
               />
             </div>
           </MouseHoverScaleAnimation>

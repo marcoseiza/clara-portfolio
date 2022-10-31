@@ -27,7 +27,7 @@
 }
 
 .next-image-container-brute {
-  @apply w-fit;
+  @apply relative w-fit;
 }
 
 .next-image-container > span {
