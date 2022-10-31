@@ -9,10 +9,10 @@ const branch =
 const schema = defineSchema({
   // See https://tina.io/docs/tina-cloud/connecting-site/ for more information about this config
   config: {
-    // token: process.env.TINA_READ_ONLY_TOKEN, // generated on app.tina.io,
-    // clientId: process.env.TINA_CLIENT_ID, // generated on app.tina.io
-    token: undefined,
-    clientId: undefined,
+    token: process.env.TINA_READ_ONLY_TOKEN, // generated on app.tina.io,
+    clientId: process.env.TINA_CLIENT_ID, // generated on app.tina.io
+    // token: undefined,
+    // clientId: undefined,
     branch,
     media: {
       tina: {
