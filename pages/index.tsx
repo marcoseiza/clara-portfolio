@@ -108,7 +108,6 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               alt="Banner Image"
               className="next-image w-full mx-auto !object-cover"
               layout="fill"
-              quality={100}
               // onLoadingComplete={() => stopLoading()}
             />
           </div>
