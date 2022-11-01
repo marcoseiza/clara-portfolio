@@ -108,7 +108,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               alt="Banner Image"
               className="next-image w-full mx-auto !object-cover"
               layout="fill"
-              // onLoadingComplete={() => stopLoading()}
+              onLoadingComplete={() => stopLoading()}
             />
           </div>
         </MouseHoverScaleAnimation>
@@ -169,6 +169,6 @@ export const getStaticProps: GetStaticProps<
 
 const HomeWithError = withError(Home);
 (HomeWithError as any).noContainer = true;
-// (HomeWithError as any).showLoading = true;
+(HomeWithError as any).showLoading = true;
 
 export default HomeWithError;
