@@ -1,7 +1,12 @@
+export const parseCssValue = (v: string | number) =>
+  typeof v == "number" ? `${v}px` : v;
+
 export const maxCSS = (a: string | number, b: string | number): string => {
-  const aStr: string = typeof a == "number" ? `${a}px` : a;
-  const bStr: string = typeof a == "number" ? `${a}px` : a;
-  return `max(${aStr}, ${bStr})`;
+  return `max(${parseCssValue(a)}, ${parseCssValue(b)})`;
+};
+
+export const minCss = (a: string | number, b: string | number): string => {
+  return `min(${parseCssValue(a)}, ${parseCssValue(b)})`;
 };
 
 export type ErrorProps = { error: { code: number; message: string } };

@@ -56,6 +56,10 @@
   @apply !relative !w-full !h-[unset] object-contain;
 }
 
+.next-image-container-height .next-image {
+  @apply !relative !h-full !w-[unset] !max-w-[unset];
+}
+
 .next-image-brute {
   @apply !relative !w-[unset] !h-[unset] !min-w-[unset] !max-w-[unset] !min-h-[unset] !max-h-[unset];
 }

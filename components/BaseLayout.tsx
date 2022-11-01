@@ -16,7 +16,7 @@ const BaseLayout = ({
 }: PropsWithChildren<BaseLayoutProps>) => {
   const headerHeight = useHeaderHeight((s) => s.height);
   const containerCSS = container
-    ? "md:container px-5 mx-auto pt-[var(--headerHeight)]"
+    ? "md:container px-5 mx-auto pt-[var(--headerHeight)] overflow-visible"
     : "";
   const contentStyle = { [`--headerHeight` as any]: `${headerHeight}px` };
   return (

@@ -26,8 +26,7 @@ import useElementSize from "../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../components/MouseHoverScaleAnimation";
 import { PropsWithPage } from "./_app";
 import withError from "../helpers/withError";
-import Link from "next/link";
-import { CaretDown, CaretUp } from "phosphor-react";
+import { CaretDown } from "phosphor-react";
 import {
   motion,
   AnimatePresence,

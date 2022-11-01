@@ -7,17 +7,19 @@ import {
 } from "../../.tina/__generated__/types";
 import MaybeImage from "../../components/MaybeImage";
 import MaybeBody from "../../components/MaybeBody";
-import { maxCSS, ErrorProps, makeError } from "../../helpers";
+import { ErrorProps, makeError, minCss } from "../../helpers";
 import { GetStaticProps, GetStaticPaths } from "next/types";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
-import { popUp } from "../../helpers/PopUp";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { popLeft, popUp } from "../../helpers/PopUp";
 import withError from "../../helpers/withError";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Carousel, { getNext, getPrev } from "../../components/Carousel";
 import AltImage from "../../components/AltImage";
 import useElementSize from "../../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../../components/MouseHoverScaleAnimation";
+import { ArrowRight } from "phosphor-react";
+import Spotlight from "../../components/Spotlight";
 
 interface StaticProps {
   data: ArtQuery;
@@ -52,25 +54,38 @@ const Art = ({ data, variables, query }: StaticProps) => {
 
   const [ref, size] = useElementSize<HTMLDivElement>();
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollXProgress } = useScroll({ container: scrollRef });
+
+  useEffect(() => {
+    scrollRef.current?.addEventListener("wheel", (e) => {
+      const scrollX = scrollXProgress.get();
+      if (scrollX == 0 && e.deltaY < 0) return;
+      if (scrollX == 1 && e.deltaY > 0) return;
+      e.preventDefault();
+      scrollRef.current?.scrollBy({ left: (e.deltaY + e.deltaX) / 2 });
+    });
+  }, [scrollRef]);
+
   if (!art) return <></>;
   return (
     <>
       <div className="flex flex-col gap-5 pb-10">
         <div
           className="flex flex-wrap gap-5 items-start"
-          style={{ ["--imgWidth" as any]: maxCSS(800, "100%") }}
+          style={{ ["--img-width" as any]: minCss(800, "100%") }}
         >
           <motion.div
             {...popUp()}
             onClick={() => setCurrentImg(0)}
-            className="cursor-zoom-in"
+            className="cursor-zoom-in w-[var(--img-width)]"
           >
             <MouseHoverScaleAnimation size={size} scale={1.03} translate={0.01}>
               <div ref={ref} className="next-image-container">
                 <MaybeImage
                   src={art.src}
                   alt="Banner Image"
-                  className="next-image w-[var(--imgWidth)]"
+                  className="next-image w-[var(--img-width)]"
                   layout="fill"
                 />
               </div>
@@ -98,36 +113,57 @@ const Art = ({ data, variables, query }: StaticProps) => {
             </motion.div>
           </div>
         </div>
-        <div
-          className="flex flex-col gap-5"
-          style={{ ["--imgWidth" as any]: maxCSS(600, "100%") }}
-        >
-          <LayoutGroup>
-            {art.altImages?.map((img, ii) => {
-              if (!img || !img.src) return null;
-              return (
-                <motion.div
-                  key={ii}
-                  {...popUp(ii * 0.1)}
-                  onClick={() => setCurrentImg(ii + 1)}
-                  className="cursor-zoom-in w-fit"
-                >
-                  <AltImage src={img?.src} className="!w-[var(--imgWidth)]" />
-                </motion.div>
-              );
-            })}
-          </LayoutGroup>
-        </div>
+        {art.altImages && (
+          <div className="flex flex-col gap-2">
+            {art.altImages.length > 1 && (
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl uppercase font-bold">More Content</h2>
+                <ArrowRight size={24} fill="bold" />
+              </div>
+            )}
+            <div
+              className="flex gap-5 h-[500px] overflow-scroll w-full pb-5"
+              style={{ ["--img-width" as any]: minCss(600, "100%") }}
+              ref={scrollRef}
+            >
+              {art.altImages.map((img, ii) => {
+                if (!img || !img.src) return null;
+                return (
+                  <motion.div
+                    key={ii}
+                    {...popLeft()}
+                    onClick={() => setCurrentImg(ii + 1)}
+                    className="cursor-zoom-in h-full"
+                  >
+                    <AltImage src={img?.src} className="!h-full" />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
       <AnimatePresence>
         {currentImg !== undefined && allImages[currentImg] !== undefined && (
-          <Carousel
-            current={currentImg}
-            all={allImages}
-            prev={() => shiftCarousel(false)}
-            next={() => shiftCarousel(true)}
-            reset={() => setCurrentImg(undefined)}
-          />
+          <motion.div
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-[55]"
+            onClick={() => setCurrentImg(undefined)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.4 } }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="max-md:hidden">
+              <Carousel
+                current={currentImg}
+                all={allImages}
+                prev={() => shiftCarousel(false)}
+                next={() => shiftCarousel(true)}
+              />
+            </div>
+            <div className="md:hidden">
+              <Spotlight src={allImages[currentImg]} />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

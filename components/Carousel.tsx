@@ -1,19 +1,16 @@
-import { MouseEventHandler, PropsWithChildren } from "react";
+import {
+  MouseEventHandler,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
+import useElementSize, { Size } from "../helpers/hooks/UseElementSize";
+import Image from "next/image";
+import ZoomOnClick from "./ZoomOnClick";
 import { motion } from "framer-motion";
 import { CaretLeft, CaretRight } from "phosphor-react";
-import MouseHoverScaleAnimation from "./MouseHoverScaleAnimation";
-import useElementSize from "../helpers/hooks/UseElementSize";
-import Image from "next/image";
 
-export interface CarouselProps {
-  current: number;
-  all: string[];
-  next: () => void;
-  prev: () => void;
-  reset: () => void;
-}
-
-const handleCarousel = (callback?: () => void): MouseEventHandler => {
+const stopPropagation = (callback?: () => void): MouseEventHandler => {
   return (e) => {
     e.stopPropagation();
     callback && callback();
@@ -34,11 +31,12 @@ export const getPrev = (current: number, size: number) => {
 
 const Control = ({
   onClick,
+  className = "",
   children,
-}: PropsWithChildren<{ onClick: () => void }>) => (
+}: PropsWithChildren<{ onClick: () => void; className?: string }>) => (
   <motion.div
-    className="px-5 cursor-pointer"
-    onClick={handleCarousel(onClick)}
+    className={"cursor-pointer " + className}
+    onClick={stopPropagation(onClick)}
     whileHover={{ scale: 1.2 }}
     whileTap={{ scale: 0.9 }}
   >
@@ -47,97 +45,113 @@ const Control = ({
 );
 
 interface ImgPreviewProps {
+  height: number;
   onClick: () => void;
   src: string;
   position: "left" | "right";
 }
-const ImgPreview = ({ onClick, src, position }: ImgPreviewProps) => {
+const ImgPreview = ({ height, onClick, src, position }: ImgPreviewProps) => {
   const right = position == "right";
   return (
-    <li
-      className={`absolute h-1/2 min-h-[15em] w-auto justify-self-end ${position}-0 z-30 cursor-pointer opacity-60 ${
+    <motion.div
+      className={`absolute min-h-[15em] w-auto justify-self-end ${position}-0 z-30 ${
         right ? "origin-right" : "origin-left"
       }`}
       style={{
-        transform: `rotateY(${right ? "-3deg" : "3deg"})`,
+        height,
+        rotateY: right ? "-3deg" : "3deg",
       }}
-      onClick={handleCarousel(onClick)}
+      onClick={stopPropagation(onClick)}
+      whileTap={{ rotateY: right ? "-4deg" : "4deg" }}
     >
       <div className="next-image-container-height h-full">
         <Image
           src={src}
           alt="Carousel Image"
-          className="!h-full block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
+          className="!h-full block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset] cursor-pointer"
           layout="fill"
         />
       </div>
-    </li>
+    </motion.div>
   );
 };
 
-const Carousel = ({ current, all, next, prev, reset }: CarouselProps) => {
-  const [ref, size] = useElementSize();
+export interface CarouselProps {
+  current: number;
+  all: string[];
+  next: () => void;
+  prev: () => void;
+}
+
+const Carousel = ({ current, all, next, prev }: CarouselProps) => {
+  const [ref, size] = useElementSize<HTMLDivElement>();
+  const [ratio, setRatio] = useState<number | undefined>(undefined);
+  const [imgSize, setImgSize] = useState<Size>({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (size.width == 0 || size.height == 0 || ratio === undefined) return;
+    const widthSmaller = size.width < size.height;
+    const newImgSize: Size = {
+      width: widthSmaller ? size.width : ratio * size.height,
+      height: widthSmaller ? size.width / ratio : size.height,
+    };
+    setImgSize(newImgSize);
+  }, [size, ratio]);
+
+  const prevImg = all[getPrev(current, all.length)];
+  const nextImg = all[getNext(current, all.length)];
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 bottom-0 right-0 bg-black/80 grid grid-cols-[auto,1fr,auto] items-center justify-center z-50"
-      onClick={() => reset()}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      {all.length > 1 ? (
-        <Control onClick={prev}>
+    <div className="relative flex items-center justify-center select-none">
+      {all.length > 0 && (
+        <Control onClick={prev} className="justify-self-end">
           <CaretLeft size={48} className="text-white" fill="bold" />
         </Control>
-      ) : (
-        <div />
       )}
-      <ul
-        className="relative flex items-center justify-center z-30"
+      <div
+        className="relative flex items-center justify-center px-20"
         style={{ perspective: "200px" }}
       >
         {(all.length > 2 || current == 1) && (
           <ImgPreview
             onClick={prev}
-            src={all[getPrev(current, all.length)]}
+            src={prevImg}
             position="left"
+            height={imgSize.height * 0.7}
           />
         )}
-        <li className="relative z-40 m-10" onClick={handleCarousel()}>
-          <MouseHoverScaleAnimation
-            size={size}
-            scale={1.6}
-            translate={0.3}
-            className="max-h-full"
-            onClick
-          >
-            <div className="next-image-container-brute" ref={ref}>
+        <div
+          className="z-40 h-[90vh] w-[70vw] flex items-center justify-center pointer-events-none"
+          ref={ref}
+        >
+          <div className="pointer-events-auto">
+            <ZoomOnClick size={imgSize} scale={1.9}>
               <Image
                 src={all[current]}
-                alt="Carousel Image"
-                layout="fill"
-                className="!h-[80vh] block !relative !w-auto !min-w-[unset] !max-w-[unset] !min-h-[unset]"
+                {...imgSize}
+                alt="Spotlight of painting"
+                onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                  setRatio(naturalWidth / naturalHeight);
+                }}
               />
-            </div>
-          </MouseHoverScaleAnimation>
-        </li>
+            </ZoomOnClick>
+          </div>
+        </div>
         {(all.length > 2 || current == 0) && (
           <ImgPreview
             onClick={next}
-            src={all[getNext(current, all.length)]}
+            src={nextImg}
             position="right"
+            height={imgSize.height * 0.7}
           />
         )}
-      </ul>
-      {all.length > 1 ? (
-        <Control onClick={next}>
+      </div>
+      {all.length > 0 && (
+        <Control onClick={next} className="justify-self-start">
           <CaretRight size={48} className="text-white" fill="bold" />
         </Control>
-      ) : (
-        <div />
       )}
-    </motion.div>
+    </div>
   );
 };
 

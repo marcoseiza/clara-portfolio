@@ -12,11 +12,11 @@ const AltImage = ({ src, className }: AltImageProps) => {
   return (
     <MouseHoverScaleAnimation
       size={size}
-      className="w-fit"
+      className="h-full"
       scale={1.02}
       translate={0.01}
     >
-      <div ref={ref} className={"next-image-container " + className}>
+      <div ref={ref} className={"next-image-container-height " + className}>
         <MaybeImage src={src} alt="Alternative Image" layout="fill" />
       </div>
     </MouseHoverScaleAnimation>

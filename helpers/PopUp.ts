@@ -18,3 +18,16 @@ export const popUp = (delay: number = 0, extend?: PopUpExtend) => ({
   viewport: { once: true, ...(extend?.viewport || {}) },
   ...(extend || {}),
 });
+
+export const popLeft = (delay: number = 0, extend?: PopUpExtend) => ({
+  initial: { x: 100, opacity: 0.1, ...(extend?.initial || {}) },
+  whileInView: { x: 0, opacity: 1, ...(extend?.whileInView || {}) },
+  transition: {
+    duration: 0.5,
+    type: "ease-in",
+    delay,
+    ...(extend?.transition || {}),
+  },
+  viewport: { once: true, ...(extend?.viewport || {}) },
+  ...(extend || {}),
+});
