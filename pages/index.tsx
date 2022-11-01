@@ -109,6 +109,7 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               className="next-image w-full mx-auto !object-cover"
               layout="fill"
               onLoadingComplete={() => stopLoading()}
+              priority
             />
           </div>
         </MouseHoverScaleAnimation>
