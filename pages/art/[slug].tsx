@@ -56,15 +56,39 @@ const Art = ({ data, variables, query }: StaticProps) => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollXProgress } = useScroll({ container: scrollRef });
+  const { scrollYProgress: windowScrollYProgress } = useScroll();
+
+  const onWheel = useCallback(
+    (e: WheelEvent) => {
+      const windowScrollY = windowScrollYProgress.get();
+      const scrollX = scrollXProgress.get();
+      if (windowScrollY >= 1 && !(e.deltaY < 0 && scrollX == 0)) {
+        e.preventDefault();
+        scrollRef.current?.scrollBy({ left: e.deltaY / 3 });
+      }
+    },
+    [windowScrollYProgress, scrollXProgress, scrollRef]
+  );
+
+  const onMoreContentWheel = useCallback(
+    (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        scrollRef.current?.scrollBy({ left: e.deltaX / 3 });
+      }
+    },
+    [scrollRef]
+  );
 
   useEffect(() => {
-    scrollRef.current?.addEventListener("wheel", (e) => {
-      const scrollX = scrollXProgress.get();
-      if (scrollX == 0 && e.deltaY < 0) return;
-      if (scrollX == 1 && e.deltaY > 0) return;
-      e.preventDefault();
-      scrollRef.current?.scrollBy({ left: (e.deltaY + e.deltaX) / 2 });
+    window.addEventListener("wheel", onWheel, { passive: false });
+    scrollRef.current?.addEventListener("wheel", onMoreContentWheel, {
+      passive: false,
     });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      scrollRef.current?.removeEventListener("wheel", onMoreContentWheel);
+    };
   }, [scrollRef]);
 
   if (!art) return <></>;
