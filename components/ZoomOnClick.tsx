@@ -40,7 +40,7 @@ const ZoomOnClick = ({
   useEffect(() => {
     x.set(width / 2);
     y.set(height / 2);
-  }, [width, height]);
+  }, [width, height, x, y]);
 
   const constraint = Math.min(width * translate, height * translate);
   const clamp = [constraint, -constraint];
@@ -63,7 +63,7 @@ const ZoomOnClick = ({
       animate(x, newX, transition);
       animate(y, newY, transition);
     },
-    [setToggle, toggle]
+    [setToggle, toggle, width, height, x, y]
   );
 
   return (

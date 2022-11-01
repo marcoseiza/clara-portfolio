@@ -38,13 +38,21 @@ const Contact: NextPage<PropsWithPage<ServerSideProps>> = ({
   return (
     <TinaPage {...contact}>
       <Head>
-        <title>Clara Eizayaga - Contact</title>
+        <title>{contact.seo?.title}</title>
+        <meta
+          name="description"
+          content={contact.seo?.description}
+          key="desc"
+        />
+        <meta property="og:title" content={contact.seo?.mediaTitle} />
+        <meta
+          property="og:description"
+          content={contact.seo?.mediaDescription}
+        />
+        <meta property="og:image" content={contact.seo?.image} />
       </Head>
       <>
-        <motion.div
-          className="flex gap-3 items-center mb-10 max-md:mb-3"
-          {...popUp(0.3)}
-        >
+        <motion.div className="flex gap-3 items-center mb-3" {...popUp(0.3)}>
           <EnvelopeSimple size={32} weight="bold" />
           <a
             href="mailto:claraeizayaga@gmail.com"

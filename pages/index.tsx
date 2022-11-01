@@ -94,7 +94,18 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
   return (
     <>
       <Head>
-        <title>Clara Eizayaga</title>
+        <title>{pageInfo?.seo?.title}</title>
+        <meta
+          name="description"
+          content={pageInfo?.seo?.description}
+          key="desc"
+        />
+        <meta property="og:title" content={pageInfo?.seo?.mediaTitle} />
+        <meta
+          property="og:description"
+          content={pageInfo?.seo?.mediaDescription}
+        />
+        <meta property="og:image" content={pageInfo?.seo?.image} />
       </Head>
       <motion.div style={{ scale: imageScale }} className="relative">
         <MouseHoverScaleAnimation

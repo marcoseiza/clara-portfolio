@@ -86,24 +86,29 @@ const Art = ({ data, variables, query }: StaticProps) => {
       scrollRef.current &&
       scrollRef.current.scrollWidth > scrollRef.current.clientWidth
     ) {
+      var current = scrollRef.current;
       window.addEventListener("wheel", onWheel, { passive: false });
       scrollRef.current.addEventListener("wheel", onMoreContentWheel, {
         passive: false,
       });
     }
     return () => {
-      if (scrollRef.current) {
+      if (current) {
         window.removeEventListener("wheel", onWheel);
-        scrollRef.current.removeEventListener("wheel", onMoreContentWheel);
+        current.removeEventListener("wheel", onMoreContentWheel);
       }
     };
-  }, [scrollRef]);
+  }, [scrollRef, onMoreContentWheel, onWheel]);
 
   if (!art) return <></>;
   return (
     <>
       <Head>
-        <title>Clara Eizayaga - {art.title}</title>
+        <title>{art.seo?.title}</title>
+        <meta name="description" content={art.seo?.description} key="desc" />
+        <meta property="og:title" content={art.seo?.mediaTitle} />
+        <meta property="og:description" content={art.seo?.mediaDescription} />
+        <meta property="og:image" content={art.seo?.image} />
       </Head>
       <div className="flex flex-col gap-5 pb-10">
         <div

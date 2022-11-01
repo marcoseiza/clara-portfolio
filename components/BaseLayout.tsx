@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { PropsWithChildren } from "react";
 import { useHeaderHeight } from "../store";
 import Header from "./header/Header";

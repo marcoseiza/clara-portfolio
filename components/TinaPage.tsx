@@ -30,7 +30,7 @@ const TinaPage = ({ children, ...page }: PropsWithChildren<PageInfo>) => {
           />
         </div>
       </motion.div>
-      <div className="relative h-full w-1/2 flex flex-col items-center p-10 pt-[calc(var(--headerHeight)+4em)] pb-0 justify-between max-md:w-full max-md:p-1 max-md:pt-5 max-md:gap-10">
+      <div className="relative h-full w-1/2 flex flex-col p-10 gap-5 pt-[calc(var(--headerHeight)+4em)] pb-0 justify-between max-md:w-full max-md:p-1 max-md:pt-5 max-md:gap-10">
         <motion.div {...popUp(0.2)}>
           <MaybeBody className="prose-headings:font-normal">
             <TinaMarkdown content={page.body} />

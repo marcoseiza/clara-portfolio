@@ -41,7 +41,11 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
   return (
     <TinaPage {...about}>
       <Head>
-        <title>Clara Eizayaga - About</title>
+        <title>{about.seo?.title}</title>
+        <meta name="description" content={about.seo?.description} key="desc" />
+        <meta property="og:title" content={about.seo?.mediaTitle} />
+        <meta property="og:description" content={about.seo?.mediaDescription} />
+        <meta property="og:image" content={about.seo?.image} />
       </Head>
       <div className="flex flex-col gap-2 items-center pb-5 w-full">
         <motion.div {...popUp(0.3)}>

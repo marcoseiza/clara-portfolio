@@ -6,11 +6,18 @@ const branch =
   process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
   process.env.HEAD ||
   "main";
+
+const token =
+  process.env.NODE_ENV == "production"
+    ? process.env.TINA_READ_ONLY_TOKEN
+    : undefined;
+const clientId =
+  process.env.NODE_ENV == "production" ? process.env.TINA_CLIENT_ID : undefined;
 const schema = defineSchema({
   // See https://tina.io/docs/tina-cloud/connecting-site/ for more information about this config
   config: {
-    token: process.env.TINA_READ_ONLY_TOKEN, // generated on app.tina.io,
-    clientId: process.env.TINA_CLIENT_ID, // generated on app.tina.io
+    token, // generated on app.tina.io,
+    clientId, // generated on app.tina.io
     // token: undefined,
     // clientId: undefined,
     branch,
@@ -32,6 +39,65 @@ const schema = defineSchema({
           document._sys.filename == "index" ? "/home" : undefined,
       },
       fields: [
+        {
+          type: "object",
+          label: "SEO Management",
+          name: "seo",
+          fields: [
+            {
+              type: "string",
+              label: "Title",
+              description:
+                "This is the page title (e.g. used in google searches).",
+              name: "title",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Description",
+              description:
+                "This is the page description (e.g. used in google searches). Under 160 characters.",
+              name: "description",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 160) {
+                    return `Description must be less than 160 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+            {
+              type: "image",
+              label: "Media Image",
+              name: "image",
+              description: "This is the image used for social media links.",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Title",
+              description: "This is the title used for social media links.",
+              name: "mediaTitle",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Description",
+              description:
+                "This is the description used for social media links. Under 60 characters.",
+              name: "mediaDescription",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 60) {
+                    return `Description must be less than 60 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+          ],
+        },
         {
           type: "image",
           label: "Hero Image",
@@ -85,6 +151,65 @@ const schema = defineSchema({
         opacity: 60,
       }),
       fields: [
+        {
+          type: "object",
+          label: "SEO Management",
+          name: "seo",
+          fields: [
+            {
+              type: "string",
+              label: "Title",
+              description:
+                "This is the page title (e.g. used in google searches).",
+              name: "title",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Description",
+              description:
+                "This is the page description (e.g. used in google searches). Under 160 characters.",
+              name: "description",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 160) {
+                    return `Description must be less than 160 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+            {
+              type: "image",
+              label: "Media Image",
+              name: "image",
+              description: "This is the image used for social media links.",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Title",
+              description: "This is the title used for social media links.",
+              name: "mediaTitle",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Description",
+              description:
+                "This is the description used for social media links. Under 60 characters.",
+              name: "mediaDescription",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 60) {
+                    return `Description must be less than 60 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+          ],
+        },
         {
           type: "image",
           label: "Hero Image",
@@ -168,6 +293,65 @@ const schema = defineSchema({
         price: 0,
       }),
       fields: [
+        {
+          type: "object",
+          label: "SEO Management",
+          name: "seo",
+          fields: [
+            {
+              type: "string",
+              label: "Title",
+              description:
+                "This is the page title (e.g. used in google searches).",
+              name: "title",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Description",
+              description:
+                "This is the page description (e.g. used in google searches). Under 160 characters.",
+              name: "description",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 160) {
+                    return `Description must be less than 160 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+            {
+              type: "image",
+              label: "Media Image",
+              name: "image",
+              description: "This is the image used for social media links.",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Title",
+              description: "This is the title used for social media links.",
+              name: "mediaTitle",
+              required: true,
+            },
+            {
+              type: "string",
+              label: "Media Description",
+              description:
+                "This is the description used for social media links. Under 60 characters.",
+              name: "mediaDescription",
+              required: true,
+              ui: {
+                validate: (v: string | undefined) => {
+                  if (v && v.length > 60) {
+                    return `Description must be less than 60 characters long. It is now ${v.length} character long.`;
+                  }
+                },
+              },
+            },
+          ],
+        },
         {
           type: "reference",
           label: "Series",
