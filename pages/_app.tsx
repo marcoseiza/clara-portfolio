@@ -29,6 +29,8 @@ const App = ({ Component, pageProps, router }: AppProps) => {
     useLoading.subscribe((s) => {
       setShowLoading(s.isLoading);
     });
+    document.body.style.overflow = showLoading ? "hidden" : "";
+    document.body.style.height = showLoading ? "100vh" : "";
   }, [router.route, showLoading]);
 
   const content = () => (
