@@ -54,9 +54,9 @@ const ImgPreview = ({ height, onClick, src, position }: ImgPreviewProps) => {
   const right = position == "right";
   return (
     <motion.div
-      className={`absolute min-h-[15em] w-auto justify-self-end ${position}-0 z-30 ${
-        right ? "origin-right" : "origin-left"
-      }`}
+      className={`absolute min-h-[15em] w-auto justify-self-end ${
+        right ? "right-0" : "left-0"
+      } z-30 ${right ? "origin-right" : "origin-left"}`}
       style={{
         height,
         rotateY: right ? "-3deg" : "3deg",
