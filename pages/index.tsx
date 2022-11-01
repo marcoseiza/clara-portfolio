@@ -109,7 +109,6 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
               className="next-image w-full mx-auto !object-cover"
               layout="fill"
               onLoadingComplete={() => stopLoading()}
-              quality={100}
               priority
             />
           </div>
