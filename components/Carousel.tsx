@@ -103,7 +103,7 @@ const Carousel = ({ current, all, next, prev }: CarouselProps) => {
 
   return (
     <div className="relative flex items-center justify-center select-none">
-      {all.length > 0 && (
+      {all.length > 1 && (
         <Control onClick={prev} className="justify-self-end">
           <CaretLeft size={48} className="text-white" fill="bold" />
         </Control>
@@ -137,7 +137,7 @@ const Carousel = ({ current, all, next, prev }: CarouselProps) => {
             </ZoomOnClick>
           </div>
         </div>
-        {(all.length > 2 || current == 0) && (
+        {(all.length > 2 || (all.length > 1 && current == 0)) && (
           <ImgPreview
             onClick={next}
             src={nextImg}
@@ -146,7 +146,7 @@ const Carousel = ({ current, all, next, prev }: CarouselProps) => {
           />
         )}
       </div>
-      {all.length > 0 && (
+      {all.length > 1 && (
         <Control onClick={next} className="justify-self-start">
           <CaretRight size={48} className="text-white" fill="bold" />
         </Control>

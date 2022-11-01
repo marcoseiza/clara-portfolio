@@ -35,6 +35,7 @@ import {
 } from "framer-motion";
 import { useSetTimeout } from "../helpers/hooks/UseSetTimeout";
 import BackToTop from "../components/BackToTop";
+import Head from "next/head";
 
 interface ServerSideProps {
   series: ArtSeries[];
@@ -92,6 +93,9 @@ const Home: NextPage<PropsWithPage<ServerSideProps>> = ({
 
   return (
     <>
+      <Head>
+        <title>Clara Eizayaga</title>
+      </Head>
       <motion.div style={{ scale: imageScale }} className="relative">
         <MouseHoverScaleAnimation
           size={size}

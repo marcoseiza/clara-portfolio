@@ -16,6 +16,7 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MaybeBody from "../components/MaybeBody";
 import MaybeImage from "../components/MaybeImage";
 import TinaPage from "../components/TinaPage";
+import Head from "next/head";
 
 interface ServerSideProps {
   data: PageQuery;
@@ -39,6 +40,9 @@ const About: NextPage<PropsWithPage<ServerSideProps>> = ({
 
   return (
     <TinaPage {...about}>
+      <Head>
+        <title>Clara Eizayaga - About</title>
+      </Head>
       <div className="flex flex-col gap-2 items-center pb-5 w-full">
         <motion.div {...popUp(0.3)}>
           <Instagram link="https://www.instagram.com/c.eizayaga/?utm_source=ig_embed&amp%3Butm_campaign=loading" />

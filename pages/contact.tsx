@@ -16,6 +16,7 @@ import client from "../.tina/__generated__/client";
 import { motion } from "framer-motion";
 import { EnvelopeSimple } from "phosphor-react";
 import TinaPage from "../components/TinaPage";
+import Head from "next/head";
 
 interface ServerSideProps {
   data: PageQuery;
@@ -36,6 +37,9 @@ const Contact: NextPage<PropsWithPage<ServerSideProps>> = ({
 
   return (
     <TinaPage {...contact}>
+      <Head>
+        <title>Clara Eizayaga - Contact</title>
+      </Head>
       <>
         <motion.div
           className="flex gap-3 items-center mb-10 max-md:mb-3"

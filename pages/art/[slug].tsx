@@ -20,6 +20,7 @@ import useElementSize from "../../helpers/hooks/UseElementSize";
 import MouseHoverScaleAnimation from "../../components/MouseHoverScaleAnimation";
 import { ArrowRight } from "phosphor-react";
 import Spotlight from "../../components/Spotlight";
+import Head from "next/head";
 
 interface StaticProps {
   data: ArtQuery;
@@ -81,19 +82,29 @@ const Art = ({ data, variables, query }: StaticProps) => {
   );
 
   useEffect(() => {
-    window.addEventListener("wheel", onWheel, { passive: false });
-    scrollRef.current?.addEventListener("wheel", onMoreContentWheel, {
-      passive: false,
-    });
+    if (
+      scrollRef.current &&
+      scrollRef.current.scrollWidth > scrollRef.current.clientWidth
+    ) {
+      window.addEventListener("wheel", onWheel, { passive: false });
+      scrollRef.current.addEventListener("wheel", onMoreContentWheel, {
+        passive: false,
+      });
+    }
     return () => {
-      window.removeEventListener("wheel", onWheel);
-      scrollRef.current?.removeEventListener("wheel", onMoreContentWheel);
+      if (scrollRef.current) {
+        window.removeEventListener("wheel", onWheel);
+        scrollRef.current.removeEventListener("wheel", onMoreContentWheel);
+      }
     };
   }, [scrollRef]);
 
   if (!art) return <></>;
   return (
     <>
+      <Head>
+        <title>Clara Eizayaga - {art.title}</title>
+      </Head>
       <div className="flex flex-col gap-5 pb-10">
         <div
           className="flex flex-wrap gap-5 items-start"
