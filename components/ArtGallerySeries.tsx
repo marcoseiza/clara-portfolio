@@ -15,29 +15,14 @@ export interface ArtGallerySeriesProps {
 const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
   const headerHeight = useHeaderHeight((state) => state.height);
 
-  const [titleRef, setTitleRef] = useState<HTMLElement | null>(null);
-  const [masonryRef, setMasonryRef] = useState<HTMLElement | null>(null);
-
-  const [titleTop, setTitleTop] = useState<boolean>(false);
-
-  const handleSize = useCallback(() => {
-    setTitleTop((titleRef?.offsetTop || 0) < (masonryRef?.offsetTop || 0));
-  }, [titleRef, masonryRef]);
-
-  useEventListener("resize", handleSize);
-
-  useEffect(() => handleSize(), [titleRef, masonryRef, handleSize]);
-
   const seriesOffsetDelay = series.art.length * order * 0.05;
 
   return (
-    <div className="flex flex-wrap mt-20 gap-5">
-      <div className="h-auto" ref={setTitleRef}>
+    <div className="flex flex-col mt-20 gap-5">
+      <div className="h-auto grow-0">
         {series.name && (
           <motion.h2
-            className={`${
-              !titleTop && "vertical-text w-10"
-            } sticky top-[calc(var(--header-height)+0.5em)] text-4xl font-bold uppercase mb-5`}
+            className={`relative text-4xl font-bold uppercase mb-5`}
             style={{ ["--header-height" as any]: `${headerHeight}px` }}
             {...popUp(seriesOffsetDelay)}
           >
@@ -45,7 +30,7 @@ const ArtGallerySeries = ({ series, order }: ArtGallerySeriesProps) => {
           </motion.h2>
         )}
       </div>
-      <div className="grow" ref={setMasonryRef}>
+      <div>
         <Masonry
           breakpointCols={{ default: 3, 1024: 2, 768: 1 }}
           className="flex w-auto gap-5"
